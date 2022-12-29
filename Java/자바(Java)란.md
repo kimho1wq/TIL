@@ -721,30 +721,423 @@
       ```
 
 ### 컬렉션 프레임워크
-- 
+![image](https://user-images.githubusercontent.com/15611500/209905433-8739ddb3-b652-4602-abd4-fb7f68c1a4e8.png)
+![image](https://user-images.githubusercontent.com/15611500/209905441-db830c5f-cec4-4d61-a2bc-8e3524e2e7be.png)
+- 컬렉션 프레임워크의 핵심 인터페이스
+  - Collection 인터페이스
+    - List와 Set의 조상 인터페이스
+    - 반환 타입이 boolean 메소드들은 작업의 성공여부를 반환한다
+  - List 인터페이스
+    - 순서가 있는 데이터의 집합, 데이터의 중복을 허용
+    - ArrayList, LinkedList, Stack, Vector 등
+  - Set 인터페이스
+    - 순서를 유지하지 않는 데이터의 집합, 데이터의 중복을 허용하지 않음
+    - HashSet, TreeSet 등
+  - Map 인터페이스
+    - 키(key), 값(value)의 쌍(pair)로 이루어진 데이터의 집합
+    - 순서는 유지하지 않고, 키 중복 허용하지 않고, 값은 중복 허용
+      - 중복된 키 값을 저장하면 기존의 값은 없어지고 마지막에 저장된 값이 남게됨
+    - HashMap, TreeMap, Hashtable, Properties 등
+- ArrayList
+  - 데이터를 읽어 오는데 걸리는 시간(access time)이 빠르다
+    - 배열은 각 요소들이 연속적인 메모리상에 존재
+    - index가 n인 데이터 주소 = 배열의 주소 + (n * data type의 크기)
+  - 크기를 변경할 수 없어서 새로운 배열을 생성해서 데이터를 복사해야 함
+    - 기존에 큰 크기의 배열을 생성해야 하므로 메모리가 낭비됨
+  - 값을 순차적으로 저장하거나 삭제할 때 유용
+  - 배열의 중간에 값을 변경하면 데이터가 많을수록 작업시간이 길어짐
+  - ```java
+    ArrayList list = new ArrayList(10);
+    list.add(new Integer(1));
+    list.add(new Integer(2));
+    list.add(new Integer(0));
+    
+    Collections.sort(list); //[0, 1, 2]
+    list.add(3); //[0, 1, 2, 3]
+    list.add(1, "A"); //[0, A, 1, 2, 3]
+    list.set(2, "B"); //[0, A, B, 2, 3]
+    list.remove(3);  //[0, A, B, 3]
+    ```
+- LinkedList
+  - 데이터를 추가하기 삭제가 빠름, 데이터의 변경이 자주일어날 때 유용
+  - 데이터를 읽어오는데 순차적으로 읽어야 해서 느림
+  - ```java
+    class Node {
+      Node next;
+      Object obj;
+    }
+    ```
+- Stack
+![image](https://user-images.githubusercontent.com/15611500/209905370-9d820119-029a-4cd5-b243-6cdbbcb35cb1.png)
+  - LIFO(Last In First Out)
+  - ArrayList와 같은 배열 기반의 구현이 적합
+    - 수식계산, 괄호검사, 웹브라우저의 뒤로/앞으로 등
+  - ```java
+    Stack st = new Stack();
+    st.push("0"); st.push("1"); st.push("2");
+    while(!st.empty())
+      System.out.println(st.pop()); // 2 1 0 
+    ```
+- Queue
+![image](https://user-images.githubusercontent.com/15611500/209905383-40d9b3ea-812f-4eca-8aa8-0c6e85021eaa.png)
+  - FIFO(First In First Out)
+  - 추가/삭제가 더 효율적인 LinkedList의 구현이 적합
+    - 최근사용문서, 인쇄작업 대기목록, 버퍼(buffer) 등
+  - ```java
+    Queue q = new LinkedList();
+    q.offer("0"); q.offer("1"); q.offer("2"); 
+    while(!q.isEmpty())
+      System.out.println(q.poll()); // 0 1 2 
+    ```
+- Iterator
+  - 컬렌션에 저장된 요소들을 읽어오는 방법을 표준화 한 인터페이스
+    - ```java
+      public interface Iterator {
+        boolean hasNext();
+        Object next();
+        void remove();
+      }
+      ```
+    - ```java
+      List list = new ArrayList();
+      Iterator it = list.iterator();
+      
+      while(it.hasNext())
+        System.out.println(it.next());
+      ```
+  - ListIterator: Iterator에 양방향 조회기능 추가(List를 구현한 경우만 사용가능)
+  - Enumeration: Iterator의 구버전
+  - Map과 Iterator
+    - KeySet()이나 entrySet()를 이용해서 Set의 iterator를 호출해야 함
+    - ```java
+      Map map = new HashMap();
+      Set s = map.entrySet();
+      Iterator it = s.iterator();
+      ```
+- Arrays의 메소드
+  - copyOf(), copyOfRange(): 배열의 일부를 복사해서 새로운 배열을 만들어 반환
+  - fill(): 배열의 모든 요소를 지정된 값으로 채움
+  - setAll(): 배열을 채우는데 사용할 함수형 인터페이스를 매개변수로 받음
+  - sort(): 배열 정렬
+  - binarySearch(): 지정된 값의 인덱스를 찾음 (정렬된 상태여야 함)
+  - asList(): 배열을 List에 담아서 반환 (list의 크기를 변경할 수 없음)
+  - parallelXXX(): 쓰레드가 작업을 나누어 처리하도록 함
+  - spliterator(): 여러 쓰레드가 처리할 수 있게 하나의 작업을 나누는 iterator
+  - stream(): 컬렌션을 스트림으로 변환
+- Comparator, Comparable
+  - 컬렉션을 정렬하는데 필요한 메소드를 정의하고 있는 인터페이스
+  - Comparable: 기본 정렬기준을 구현하는데 사용 (java.lang 패키지)
+    - Interger, String, Date 등 
+    - ```java
+      public interface Comparable {
+        int compareTo(Object o);
+      }
+      ```
+  - Comparator: 기본 정렬기준 외에 다른 기준으로 정렬하고자 할 때 사용 (java.util 패키지)
+    - ```java
+      public interface Comparator {
+        int compare(Object o1, Object o2);
+      }
+      ```
+  - 비교하는 값보다 작으면 음수(-), 같으면 0, 크면 양수(+)를 반환하도록 구현해야 함
+    - ```java
+      return (this.value < anotherVal ? -1 : (this.value == anotherVal ? 0 : 1));
+      ```
+- HashSet
+![image](https://user-images.githubusercontent.com/15611500/209905394-bfce2558-2e65-4f17-a531-026ce7b8cb1f.png)
+  - Set인터페이스를 구현한 대표적인 컬렉션
+  - add를 이용해서 중복된 요소를 저정할 경우 false값을 반환
+  - 저장순서를 유지하려면 LinkedHashSet을 사용
+    - ```java
+      Object[] objArr = {"1", new Interger(1), "2", "2", "3", "4"};
+      Set set = new HashSet();
+      for(int i=0; i<objArr.length; i++)
+        set.add(objArr[i]);
+    
+      //하나는 String 인스턴스, 하나는 Interger 인스턴스
+      System.out.println(set); //[1, 1, 2, 3, 4]
+      ```
+- TreeSet
+![image](https://user-images.githubusercontent.com/15611500/209905407-3d62c593-db72-4626-a7ab-a7bf111ecdb3.png)
+  - 이진 탐색 트리(binary search tree)의 성능을 향상 시킨 레드-블랙 트리(Red-Black tree)로 데이터를 저장하는 컬렉션 클래스
+    - 부모노드 보다 작은 값은 왼쪽에 큰 값을 오른쪽에 저장
+    - ```java
+      class TreeNode {
+        TreeNode left;
+        Object element;
+        TreeNode right;
+      }
+      ```
+  - 단일 값 검색과 범위검색(range search)가 빠름
+  - 데이터 추가/삭제 시간은 더 걸림
+  - 중복된 값을 저장하지 못함
+  - ```java
+    String from = "b";
+    String to = "d";
+    
+    //대문자가 소문자보다 정렬 우선시됨
+    System.out.println(set); //Car, abc, alien, bat, car, dZZZZ, dance, disc, dzzzz, elephant
+    System.out.println(set.subSet(from, to)); //[bat, cat] (b~c)
+    System.out.println(set.subSet(from, to + "zzz"));[bat, car, dZZZZ, dance, disc] (b~d)
+    ```
+- HashMap
+![image](https://user-images.githubusercontent.com/15611500/209905419-c4e3952a-86d9-425f-8d20-b0eb7ef6083f.png)
+  - 기존의 Hashtable(deprecated)과 같음
+  - Entry라는 내부 클래스를 정의하여 배열로 관리
+    - ```java
+      Entry[] table;
+      static class Entry implements Map.Entry {
+        final Object key;
+        Object value;
+      }
+      ```
+  - 한정되지 않은 범위의 비순차적인 값들의 빈도수는 HashMap을 이용해서 구현 가능
+    - ```java
+      HashMap map = new HashMap();
+      map.put("MyId", "1234");
+      map.put("MyId", "0012"); //OK. 이미 존재하는 기존 값은 없어짐
+      System.out.println(map.containKey("MyId")); //true
+      System.out.println(map.get("1234")); //0012
+      
+      String[] data = {"A", "A", "A", "D", "K", "D", "A"};
+      HashMap map = new HashMap();
+      for(int i=0; i<data.length; i++) {
+        if(map.containsKey(data[i]) {
+          map.put(data[i], (int)map.get(data[i]) + 1); //기존에 있으면 1을 더해서 저장
+        else
+          map.put(data[i], 1); //기존에 없는 키는 값을 1로 저장
+      ```
+- Collections의 메소드
+  - 동기화(synchronizetion) 메소드
+    - ```java
+      List list = Collections.synchronizedList(new ArrayList(...));
+      ```
+  - 변경불가(읽기전용) 컬렉션 만들기
+    - ```java
+      List list = Collections.unmodifiable(new ArrayList(...));
+      ```
+  - 싱글톤 컬렉션 만들기
+    - ```java
+      List list = Collections.singletonList(new ArrayList(...));
+      ```
+  - 한 종류의 객체만 저장하는 컬렉션 만들기
+    - ```java
+      List list = Collections.checkedList(new ArrayList(...), String.class);
+      ```
 
+### 제네릭스, 열거형, 애너테이션
+- 제네릭스(Generics)
+  - 컴파일 시 타입 체크(compile-time type check)를 해주는 기능
+  - 컴파일 후에는 제네릭 타입이 제거되고 원시 타입으로 바뀜
+  - 저장된 객체를 꺼낼 때 형변환 필요가 없음
+    - ```java
+      ArrayList<Tv> tvList = new ArrayList<Tv>();
+      tvList.add(new Audio()); //컴파일 에러. Tv 외에 다른 타입 저장 불가
+      ```
+  - 타입 변수(type variable)
+    - '<>'안에 있는 변수
+    - Object타입 대신 임의의 타입을 의미하는 타입 변수(T)를 사용하면 됨
+    - ```java
+      class Box<T> {}
+      Box<String> box = new Box<String>();
+      ```
+      - Box<T>: 제네릭 클래스, 'T Box'라고 읽음
+      - T: 타입 변수 또는 타입 매개변수 (T는 타입문자)
+      - Box: 원시 타입(raw type)
+      - Box<String> : 제네릭 타입 호출 (타입 매개변수에 타입을 지정하는 것)
+      - String: 대입된 타입 또는 매개변수화된 타입(parameterized type)
+  - 제네릭 타입과 다형성
+    - ```java
+      ArrayList<Tv> list = new ArrayList<Tv>(); // ok.
+      ArrayList<Product> list = new ArrayList<Tv>(); // 에러. 상속관계에 있어도 안됨
+      List<Tv> list = new ArrayList<Tv>(); // ok. 클래스의 타입간 다형성은 가능
+      
+      ArrayList<Product> list = new ArrayList<Product>();
+      list.add(new Product());
+      list.add(new Tv()); // ok. 단, 객체를 꺼낼 때 형변환이 필요 
+      ```
+  - Iterator<E>
+    - ```java
+      ArrayList<Student> list = new ArrayList<Student>();
+      list.add(new Student("홍길동", 1, 2));
+      
+      Iteractor<Student> it = list.iterator();
+      while(it.hasNext())
+        Student s = it.next(); //제네릭을 사용하지 않으면 형변환 필요: (Student)it.next()
+      ```
+  - 제한된 제네릭 클래스
+    - 'extends'를 사용하면 특정 타입의 자손들만 대입할 수 있음
+    - 인터페이스도 extends를 사용, '&'기호로 연결 가능
+      - ```java
+        class FruitBox<T extends Fruit & Eatable> {...}
+        ```
+  - 제네릭스의 제약
+    - static멤버에 타입 변수 T를 사용할 수 없음
+      - T는 인스턴스 변수로 간주
+    - 배열 타입의 참조변수 선언은 가능하지만 배열 생성은 안됨
+      - 컴파일 시점에 타입 T를 정확히 알아야 하는데, 연산자 new instanceof 등은 알수 없음
+      - ```java
+        class Box<T> {
+          T[] itemArr; //ok.
+          T[] tmpArr = new T[10]; //에러.
+        }
+        ```
+  - 와일드 카드
+    - '?'기호를 사용하여 제네릭 타입에 다형성 적용
+      - ```java
+        ArrayList<? extends Product> list = new ArrayList<Tv>(); // ok.
+        ArrayList<? extends Product> list = new ArrayList<Audio>(); // ok.
+        ```
+        - \<? extend T>: T와 그 자손들만 가능
+        - \<? super T>: T와 그 조상들만 가능
+        - \<?>: 제한 없음. 모든 타입 가능
+      - ```java
+        static Juice makeJuice(FruitBox<? extends Fruit> box) {
+          String tmp = "";
+          for(Fruit f : box.getList())
+            tmp += f + " ";
+          return new Juice(tmp);
+        }
+        Juicer.makeJuice(new FruitBox<Fruit>()); // ok.  
+        Juicer.makeJuice(new FruitBox<Apple>()); // ok.
+        ```
+  - 제네릭 메소드
+    - 메소드 선언부(반환 타입 앞)에 제네릭 타입이 있는 것
+    - 지역 변수를 선언한 것과 비슷, 메소드가 static이어도 상관 없다
+      - ```java
+        class FruitBox<T> {
+          ...
+          static <E> void sort(List<T> list, Comparator<? super T> c) {...}
+        }
+        ```
+    - 제네릭 메소드를 호출할 때 대입된 타입이 있을 경우, 참조변수나 클래스 이름을 생략할 수 없다
+      - ```java
+        static <T extends Fruit> Juice makeJuice(FruitBox<T> box) {
+          ...
+        }
+        <Fruit>makeJuice(new FruitBox<Fruit>());  //에러. 클래스 이름 생략 불가
+        this.<Fruit>makeJuice(new FruitBox<Fruit>());    // ok.
+        Juicer.<Fruit>makeJuice(new FruitBox<Fruit>());  // ok.
+        ```
+  - 제네릭 타입의 형변환
+    - ```java
+      // 원시 타입 <-> 제네릭 타입
+      Box box = (Box)new Box<Object>(); // ok.
+      Box<Object> objBox = (Box<Object>)new Box(); // ok.
+      
+      // 제네릭 타입 <-> 제네릭 타입
+      Box<Object> objBox = (Box<Object>)new Box<String>(); //에러. 형변환 불가
+      Box<? extends Object> objBox = new Box<String>(); //ok.
+      ```
+  - 제네릭 타입의 제거
+    0. 컴파일 전(.java)
+      - ```java
+        class Box<T extends Fruit> {
+          void add(T t) {...}
+          T get(int i) {
+            return list.get(i);
+          }
+        }
+        ```
+    1. 제네릭 타입의 경계(bound)를 제거
+      - ```java
+        class Box {
+          void add(Fruit t) {...}
+          Fruit get(int i) {
+            return list.get(i);
+          }
+        }
+        ```
+        - \<T extends Fruit>라면 T는 Fruit로 치환
+        - \<T>인 경우 Object로 치환
+    2. 제네릭 타입을 제거한 후에 타입이 일치하지 않으면 형변환 추가
+      - ```java
+        class Box {
+          void add(Fruit t) {...}
+          Fruit get(int i) {
+            return (Fruit)list.get(i);
+          }
+        }
+        ```
+        - List의 get()은 Object타입을 반환하므로 형변환 필요
+- 열거형(enum)
+![image](https://user-images.githubusercontent.com/15611500/209934114-b69e60b7-c2de-43c8-9661-4ac21a10a013.png)
+  - 여러 상수를 선언해야 할 때 사용
+  - 자동적으로 0부터 시작하는 정수값이 할당됨
+    - ```java
+      enum Direction { EAST, SOUTH, WEST, NORTH } // 0, 1, 2, 3
 
+      Direction dir;      
+      if(dir == Direction.EAST) // ok.
+      if(dir > Direction.WEST) // 에러. 열거형 상수에 비교연산자 사용 불가
+      if(dir.compareTo(Direction.WEST) > 0) // ok.
+      ```
+  - 모든 열거형의 조상은 java.lang.Enum
+    - ```java
+      Direction[] dArr = Direction.values();
+      for(Directiond d : dArr)
+        System.out.println(d.name(), d.ordinal()); //EAST, 0 ...
+      ```
+  - 열거형에 멤버 추가하기
+    - 열거형 생성자는 제어자가 묵시적으로 private이기 때문에 외부에서 호출불가
+      - ```java
+        enum Direction {
+          EAST(1), SOUTH(5), WEST(-1), NORTH(10)  // 1, 5, -1, 10
+        
+          private final int value; // 정수를 저장할 필드
+          Direction(int value) { this.value = value; } 
+          public int getValue() { return value; }
+        }
+    
+        Direction d = new Direction(1); // 에러.
+        ```
+- 애너테이션(annotation)
+![image](https://user-images.githubusercontent.com/15611500/209934137-9d97475f-8ec6-48c9-9691-16d301bf2466.png)
+  - 소스코드 안에 다른 프로그램을 위한 정보를 약속된 형식으로 포함시킴
+  - 주석(/** */) 안에 정보를 저장하고, javadoc.exe이 정보를 읽어서 HTML문서를 작성하는데 사용
+  - JDK의 표준 애너테이션은 컴파일러에게 유용한 정보를 제공
+  - 애너테이션 정의하기
+    - 애너테이션의 요소는 반환값이 있고, 매개변수는 없는 추상 메소드의 형태를 가짐
+    - 애너테이션을 적용할 때 모든 요소들의 값을 지정해야 함
+      - ```java
+        @interface 애너테이션이름 {
+          타입 요소이름();
+          ...
+        }
+        ```
+      - ```java
+        @interface TestInfo {
+          int count() default 1;
+          String testedBy();
+          String[] testTools();
+          TestType testType();  //enum 가능
+          DateTime testDate();  //다른 애너테이션을 포함시킬 수 있음
+        }
+        @interface DateTime {
+          String yymmdd();
+          String hhmmss() default "235959";
+        }
+        
+        @TestInfo(
+          count=3, testedBy="Kim", testTools={"JUnit", "AutoTester"},
+          testType=TestType.FIRST, testDate=@DateTime(yymmdd="190101")
+        )
+        public class NewClass { ... }
+        ```
+    - 요소 정의 규칙
+      1. 요소의 타입은 기본형, String, enum, 애너테이션, Class만 허용
+      2. () 안에 매개변수를 선언할 수 없음
+      3. 예외를 선언할 수 없음
+      4. 요소를 타입 매개변수로 정의할 수 없음
+      - ```java
+        @interface AnnoTest {
+          String major(int i, int j); // 에러. 2.
+          String minor() throws Exceptions; //에러. 3.
+          ArrayList<T> list(); // 에러. 4.
+        }
+        ```
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+### 쓰레드
 
 
 
