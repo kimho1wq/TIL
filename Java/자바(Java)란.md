@@ -492,9 +492,9 @@
   - 컴파일 에러: 컴파일 시에 발생
   - 런타임 에러: 실행 시에 발생
   - 논리적 에러: 실행은 되지만 의도와 다르게 동작
-![1](https://user-images.githubusercontent.com/15611500/209649486-9bea7dc1-46d8-40cb-9d0f-40d11994d399.jpg)
-![2](https://user-images.githubusercontent.com/15611500/209649491-6b3c173e-1d3d-4036-bccf-e3617b221ffe.jpg)
 - 모든 예외의 최고 조상은 Exception 클래스
+  - ![1](https://user-images.githubusercontent.com/15611500/209649486-9bea7dc1-46d8-40cb-9d0f-40d11994d399.jpg)
+  - ![2](https://user-images.githubusercontent.com/15611500/209649491-6b3c173e-1d3d-4036-bccf-e3617b221ffe.jpg)
   - checked 예외
     - Exception클래스와 그 자손들
     - 사용자의 실수와 같은 외부의 영향으로 발생할 수 있는 예외
@@ -562,11 +562,11 @@
         ```
 
 ### java.lang패키지와 유용한 클래스
-- java.lang패키지
+- java.lang 패키지
   - 자바프로그래밍에 가장 기본이 되는 클래스들을 포함
   - import문 없이 관련 클래스들을 사용할 수 있음 
-- Object클래스
-![image](https://user-images.githubusercontent.com/15611500/209749562-13596844-9552-4f69-9a14-36e67d759b8c.png)
+- Object 클래스
+  - ![image](https://user-images.githubusercontent.com/15611500/209749562-13596844-9552-4f69-9a14-36e67d759b8c.png)
   - 모든 클래스의 최고 조상
   - 멤버변수는 없고 오직 11개의 메소드만 존재
   - equals()
@@ -588,10 +588,10 @@
       public String toString() {
         return getClass().getName()+"@"+Integer.toHexString(hashCode()); //클래스이름 @ 16진수의해시코드
       ```
-- String클래스
-![image](https://user-images.githubusercontent.com/15611500/209753880-79fe4c4a-335b-4bba-a475-7f4607e68217.png)
-![image](https://user-images.githubusercontent.com/15611500/209753941-b3c43da7-48f8-4288-ad43-a17ad6c846f3.png)
-![image](https://user-images.githubusercontent.com/15611500/209753966-c3125563-9945-48d9-837e-ca78463fa134.png)
+- String 클래스
+  - ![image](https://user-images.githubusercontent.com/15611500/209753880-79fe4c4a-335b-4bba-a475-7f4607e68217.png)
+  - ![image](https://user-images.githubusercontent.com/15611500/209753941-b3c43da7-48f8-4288-ad43-a17ad6c846f3.png)
+  - ![image](https://user-images.githubusercontent.com/15611500/209753966-c3125563-9945-48d9-837e-ca78463fa134.png)
   - 문자열을 저장하기 위해 char[] value를 인스턴스 변수로 정의
   - 문자열 만드는 방법
     1. String str1 = "abc"; //문자열 리터럴 "abc"의 주소가 저장
@@ -621,9 +621,9 @@
         - 원래 반환 타입은 Integer
         - 오토박싱(auto-boxing)으로 인해 int로 자동변환
         - ![image](https://user-images.githubusercontent.com/15611500/209755571-07926296-1d02-426f-9bfa-460eecfa3393.png)
-- StringBuffer클래스
-![image](https://user-images.githubusercontent.com/15611500/209755586-644c29cf-7fa8-40ca-a0cf-fcd56ae9b78f.png)
-![image](https://user-images.githubusercontent.com/15611500/209755646-1f63dd26-f39b-4672-baeb-bb889fee1af4.png)
+- StringBuffer 클래스
+  - ![image](https://user-images.githubusercontent.com/15611500/209755586-644c29cf-7fa8-40ca-a0cf-fcd56ae9b78f.png)
+  - ![image](https://user-images.githubusercontent.com/15611500/209755646-1f63dd26-f39b-4672-baeb-bb889fee1af4.png)
   - 내부적으로 문자열 편집을 위한 버퍼(buffer)를 가지고 있어 문자열 변경 가능
   - 인스턴스를 생성할 때 buffer 크기를 지정 가능
     - 지정하지 않으면 16개의 문자를 저장할 수 있는 크기의 buffer 생성
@@ -640,13 +640,13 @@
         ```
   - StringBuffer는 멀티쓰레드에 안전(thread safe)하도록 동기화(synchronized)되어 있음
   - StringBuilder는 StringBuffer와 같은 기능이지만 쓰레드 동기화가 없음
-- Math클래스
-![image](https://user-images.githubusercontent.com/15611500/209755661-e7448f38-676c-4779-bd26-83d7e6e4edd0.png)
+- Math 클래스
+  - ![image](https://user-images.githubusercontent.com/15611500/209755661-e7448f38-676c-4779-bd26-83d7e6e4edd0.png)
   - 클래스 내에 인스턴스변수가 하나도 없음
   - 생성자 접근 제어자가 private
   - 모든 메소드가 static 
-- 래퍼(wrapper)클래스
-![image](https://user-images.githubusercontent.com/15611500/209755686-b1671db4-cca5-48a3-8b4d-ef389413ec6f.png)
+- 래퍼(wrapper) 클래스
+  - ![image](https://user-images.githubusercontent.com/15611500/209755686-b1671db4-cca5-48a3-8b4d-ef389413ec6f.png)
   - 기본형(primitive type)변수를 객체로 다뤄야 하는 경우 사용
   - equals()가 오버라이딩되어 있어 주소값이 아닌 객체가 가지고 있는 값(value)을 비교
   - 비교연산자를 사용할 순 없고 compareTo()를 제공
@@ -721,9 +721,9 @@
       ```
 
 ### 컬렉션 프레임워크
-![image](https://user-images.githubusercontent.com/15611500/209905433-8739ddb3-b652-4602-abd4-fb7f68c1a4e8.png)
-![image](https://user-images.githubusercontent.com/15611500/209905441-db830c5f-cec4-4d61-a2bc-8e3524e2e7be.png)
 - 컬렉션 프레임워크의 핵심 인터페이스
+  - ![image](https://user-images.githubusercontent.com/15611500/209905433-8739ddb3-b652-4602-abd4-fb7f68c1a4e8.png)
+  - ![image](https://user-images.githubusercontent.com/15611500/209905441-db830c5f-cec4-4d61-a2bc-8e3524e2e7be.png)
   - Collection 인터페이스
     - List와 Set의 조상 인터페이스
     - 반환 타입이 boolean 메소드들은 작업의 성공여부를 반환한다
@@ -768,7 +768,7 @@
     }
     ```
 - Stack
-![image](https://user-images.githubusercontent.com/15611500/209905370-9d820119-029a-4cd5-b243-6cdbbcb35cb1.png)
+  - ![image](https://user-images.githubusercontent.com/15611500/209905370-9d820119-029a-4cd5-b243-6cdbbcb35cb1.png)
   - LIFO(Last In First Out)
   - ArrayList와 같은 배열 기반의 구현이 적합
     - 수식계산, 괄호검사, 웹브라우저의 뒤로/앞으로 등
@@ -779,7 +779,7 @@
       System.out.println(st.pop()); // 2 1 0 
     ```
 - Queue
-![image](https://user-images.githubusercontent.com/15611500/209905383-40d9b3ea-812f-4eca-8aa8-0c6e85021eaa.png)
+  - ![image](https://user-images.githubusercontent.com/15611500/209905383-40d9b3ea-812f-4eca-8aa8-0c6e85021eaa.png)
   - FIFO(First In First Out)
   - 추가/삭제가 더 효율적인 LinkedList의 구현이 적합
     - 최근사용문서, 인쇄작업 대기목록, 버퍼(buffer) 등
@@ -844,7 +844,7 @@
       return (this.value < anotherVal ? -1 : (this.value == anotherVal ? 0 : 1));
       ```
 - HashSet
-![image](https://user-images.githubusercontent.com/15611500/209905394-bfce2558-2e65-4f17-a531-026ce7b8cb1f.png)
+  - ![image](https://user-images.githubusercontent.com/15611500/209905394-bfce2558-2e65-4f17-a531-026ce7b8cb1f.png)
   - Set인터페이스를 구현한 대표적인 컬렉션
   - add를 이용해서 중복된 요소를 저정할 경우 false값을 반환
   - 저장순서를 유지하려면 LinkedHashSet을 사용
@@ -858,7 +858,7 @@
       System.out.println(set); //[1, 1, 2, 3, 4]
       ```
 - TreeSet
-![image](https://user-images.githubusercontent.com/15611500/209905407-3d62c593-db72-4626-a7ab-a7bf111ecdb3.png)
+  - ![image](https://user-images.githubusercontent.com/15611500/209905407-3d62c593-db72-4626-a7ab-a7bf111ecdb3.png)
   - 이진 탐색 트리(binary search tree)의 성능을 향상 시킨 레드-블랙 트리(Red-Black tree)로 데이터를 저장하는 컬렉션 클래스
     - 부모노드 보다 작은 값은 왼쪽에 큰 값을 오른쪽에 저장
     - ```java
@@ -881,7 +881,7 @@
     System.out.println(set.subSet(from, to + "zzz"));[bat, car, dZZZZ, dance, disc] (b~d)
     ```
 - HashMap
-![image](https://user-images.githubusercontent.com/15611500/209905419-c4e3952a-86d9-425f-8d20-b0eb7ef6083f.png)
+  - ![image](https://user-images.githubusercontent.com/15611500/209905419-c4e3952a-86d9-425f-8d20-b0eb7ef6083f.png)
   - 기존의 Hashtable(deprecated)과 같음
   - Entry라는 내부 클래스를 정의하여 배열로 관리
     - ```java
@@ -1061,7 +1061,7 @@
         ```
         - List의 get()은 Object타입을 반환하므로 형변환 필요
 - 열거형(enum)
-![image](https://user-images.githubusercontent.com/15611500/209934114-b69e60b7-c2de-43c8-9661-4ac21a10a013.png)
+  - ![image](https://user-images.githubusercontent.com/15611500/209934114-b69e60b7-c2de-43c8-9661-4ac21a10a013.png)
   - 여러 상수를 선언해야 할 때 사용
   - 자동적으로 0부터 시작하는 정수값이 할당됨
     - ```java
@@ -1092,7 +1092,7 @@
         Direction d = new Direction(1); // 에러.
         ```
 - 애너테이션(annotation)
-![image](https://user-images.githubusercontent.com/15611500/209934137-9d97475f-8ec6-48c9-9691-16d301bf2466.png)
+  - ![image](https://user-images.githubusercontent.com/15611500/209934137-9d97475f-8ec6-48c9-9691-16d301bf2466.png)
   - 소스코드 안에 다른 프로그램을 위한 정보를 약속된 형식으로 포함시킴
   - 주석(/** */) 안에 정보를 저장하고, javadoc.exe이 정보를 읽어서 HTML문서를 작성하는데 사용
   - JDK의 표준 애너테이션은 컴파일러에게 유용한 정보를 제공
@@ -1137,7 +1137,304 @@
         }
         ```
 
+
 ### 쓰레드
+
+- 프로세스(process): 실행 중인 프로그램(program)
+  - 프로그램을 실행하면 OS로부터 실행에 필요한 자원(메모리)을 할당받아 프로세스가 됨
+- 쓰레드(thread): 프로세스의 자원을 이용해서 실제로 작업을 수행하는 것
+  - 쓰레드의 구현
+    - Thread 클래스를 상속받아 구현
+      - ```java
+        class MyThread extends Thread {
+          public void run() { /* 작업내용 */ }
+        }
+        ```
+    - Runnable 인터페이스를 구현
+      - ```java
+        class MyThread implements Runnable {
+          public void run() { /* 작업내용 */ }
+        }
+        ```
+  - 쓰레드의 실행
+    1. main 메소드에서 쓰레드의 start()를 호출
+    2. start()는 새로운 쓰레드를 생성하고, 쓰레드가 사용할 호출스택 생성
+    3. 새로 생성된 호출새택에 run()이 호출돼 쓰레드가 독립된 공간에서 작업 수행
+    4. 스케줄러가 정한 순서에 의해서 2개의 호출스택이 번걸아 가면서 실행됨
+  - 싱글쓰레드와 멀티쓰레드
+    - ![image](https://user-images.githubusercontent.com/15611500/209964510-029fda32-df9c-46e8-b9ec-07acbf80abb6.png)
+    - ![image](https://user-images.githubusercontent.com/15611500/209964537-4f9aada0-ddc2-4e18-8a42-7ca90e3d4de1.png)
+    - 멀티쓰레딩의 장점
+      - CPU의 사용률을 향상시킴
+      - 자원을 효율적으로 사용
+      - 사용자에 대한 응답성 향상
+      - 작업이 분리되어 코드가 간결해짐
+    - 멀티 쓰레드 시 작업 전환(context switching) 시간이 더 소요됨
+      - 다음에 실행해야 할 위치(PC, program counter)등의 정보를 읽어야 함
+    - 두 쓰레드가 서로 다른 자원을 사용하는 경우 싱글쓰레드 보다 멀티쓰레드 프로세스가 훨씬 효율적
+    - 싱글 코어인 경우 멀티쓰레드라도 하나의 코어가 번갈아가면서 작업을 수행하기 때문에 작업 시간이 겹치지 않음
+    - 멀티 코어는 두 쓰레드가 동시에 수행될 수 있음, 싱글 코어보다 효율이 훨씬 좋음
+    - JVM이 쓰레드를 얼마나 실행할 것인지 스케줄 함
+    - OS가 프로레스를 얼마나 실행할 것인지 스케줄 함
+      - 결국, 멀티쓰레드 작성 자바 프로그램은 OS에 종속적임 
+  - 쓰레드의 I/O블락킹(blocking)
+    - ![image](https://user-images.githubusercontent.com/15611500/209964683-51cda16b-099f-46a2-9a78-62c734c923c9.png)
+    - 데이터를 입력받는 작업, 네트워크로 파일을 주고 받는 작업, 외부기기와의 입출력이 필요한 경우 등
+  - 쓰레드의 우선순위(priority)
+    - 우선순위의 값에 따라 쓰레드가 얻는 실행시간이 달라짐
+    - main 메소드 쓰레드의 우선순위가 5
+    - 쓰레드를 실행하기 전에만 우선순위를 변경할 수 있음
+      - ```java
+        void setPriority(int newPriority)
+        int getPriority()
+        
+        public static final int MAX_PRIORITY  = 10 // 최대우선순위
+        public static final int MIN_PRIORITY  = 1  // 최소우선순위
+        public static final int NORM_PRIORITY = 5  // 보통우선순위
+        ```
+    - 단, 우선순위에 차등을 두어 쓰레드를 실행하려면, 특정 OS의 스케줄링 정책과 JVM의 구형을 직접 확인해야 함 (정확히 알 수 없음?)
+  - 쓰레드 그룹(thread group)
+    - ![image](https://user-images.githubusercontent.com/15611500/209965264-58fa3c52-4460-437e-8f9e-894736933bcc.png)
+    - 보안상의 이유로 도입된 개념으로, 자신 또는 하위 쓰레드 그룹은 변경할 수 있지만 다른 그룹은 변경 불가능
+    - 쓰레드를 쓰레드 그룹에 포함시키려면 Thread의 생성자를 이용
+      - ```java
+        Thread(ThreadGroup group, String name)
+        Thread(ThreadGroup group, Runnable targer)
+        ```
+    - 모든 쓰레드는 반드시 쓰레드 그룹에 포함되어 있어야 함
+    - 기본적으로 자신을 생성한 쓰레드와 같은 그룹에 속함
+    - JVM은 main과 system이라는 쓰레드 그룹을 만들고, 운영에 필요한 쓰레드들을 생성함
+      - Garbage collection을 수행하는 Finalizer쓰레드는 system그룹에 속함
+      - 쓰레드 그룹을 지정하지 않으면 자동적으로 main그룹에 속함
+  - 데몬 쓰레드(daemon thread)
+    - 다른 쓰레드의 작업을 돕는 보조적인 역할을 수행
+      - 가비지 컬렉터, 워드프로레서의 자동저장, 화면자동갱신 등
+    - 무한루프와 조건문을 이용해서 실행 후 대기하고 있다가 특정 조건이 만족되면 작업을 수행하고 다시 대기하는 형식
+      - ```java
+        Thread t = new Thread(new Ex13());
+        t.setDaemon(true); //true로 지정하면 데몬 쓰레드가 된다
+        t.start();
+        ```
+  - 쓰레드의 상태
+    - ![image](https://user-images.githubusercontent.com/15611500/209964578-b4b1a77c-e16e-439c-8983-458ddeb7f5c5.png)
+    - NEW: 쓰레드가 생성되고 아직 start()가 호출되지 않은 상태
+    - RUNNABLE: 실행 중 또는 실행 가능한 상태
+    - BLOCKED: 동기화블럭에 의해서 일시정지된 상태(lock이 풀릴 때까지 기다리는 상태)
+    - WAITING, TIMED_WATING: 쓰레드 작업이 종료되지는 않았지만 일시정지 상태
+    - TERMINATED: 쓰레드의 작업이 종료된 상태
+  - 쓰레드의 실행제어
+    - ![image](https://user-images.githubusercontent.com/15611500/209964646-a680533a-f3ff-4cd4-921b-5c3268977845.png)
+    - interrupt
+      - interrupt()
+        - 쓰레드의 interrupted상태(인스턴스 변수)를 false에서 true로 변경
+      - isInterrupted()
+        - 쓰레드의 interrupted상태(인스턴스 변수)를 반환
+      - interrupted()
+        - 현재 쓰레드의 interrupted상태(인스턴스 변수)를 반환 후, false로 변경
+      - ```java
+        class Main {
+          public static void main(String[] args) throws Exception {
+            MyThread th = new MyThread();
+            th.start();
+            
+            String input = JOptionPane.showInputDialog("카운트 다운을 멈추려면 아무 값이나 입력하시오");
+            th.interrupt();
+            System.out.println(th.isInterrupted()); // true
+          }
+        }
+        class MyThread extends Thread {
+          public void run() {
+            int i=10;
+            while(i!=0 && !isInterrupted()) {
+              System.out.println(i--);       // 카운트 다운
+              for(long x=0;x<250000000L;x++) // 시간 지연 용도
+            }
+          System.out.println("카운트 다운 종료");
+        }
+        ```
+    - suspend(), resume(), stop()
+      - 쓰레드를 멈추게하고, 다시 실행대기 상태가 되게 하며, 쓰레드를 즉시 종료시킴
+      - 하지만, 교착상태(deadlock)를 일으키기 쉽기때문에 권장되지 않음(deprecated)
+    - sleep()
+      - 지정된 시간동안 쓰레드를 멈추게한다
+      - 항상 현재 실행 중인 쓰레드에 대해 작동
+      - 시간이 다 되거나 interrupt()가 호출되면, InterruptedException이 발생해서 항상 예외 처리가 필수
+        - ```java
+          try {
+            Thread.sleep(1, 500000); // 쓰레드를 0.0015s 멈추게 한다
+          } catch(InterruptedException e) {}
+          ```
+    - join()
+      - 작업 중에 다른 쓰레드의 작업이 먼저 수행되어야 할 때 사용
+      - 자신이 하던 작업을 멈추고, 다른 쓰레드가 지정된 시간동안 작업을 수행하도록 함
+        - 시간을 지정하지 않으면 해당 쓰레드가 작업을 모두 마칠 때까지 기다림
+      - sleep()처럼 interrupt()에 의해 대기 상태에서 벗어날 수 있음
+        - ```java
+          try {
+            th.join()  // 현재 실행중인 쓰레드가, 쓰레드 th의 작업이 끝날때까지 기다림
+          } catch(InterruptedException e) {}
+          ```
+    - yield()
+      - 쓰레드 자신에게 주어진 실행시간을 다음 차례 쓰레드에게 양보(yield)한다
+        - 1초의 실행시간을 할당받은 쓰레드가 0.5초 후 yield()를 호출하면 0.5는 포기하고 실행대기상태가 됨
+  - 쓰레드의 동기화(synchronization)
+    - 한 쓰레드가 진행 중인 작업을 다른 쓰레드가 간섭하지 못하게 막는 것
+      - 공유 데이터를 사용하는 코드 영역을 임계 영역(critical section)으로 지정
+      - 공유 데이터(객체)가 가지고 있는 락(lock)을 획득한 하나의 쓰레드만 이 영역 내의 코드를 수행할 수 있게 함
+      - 해당 쓰레드가 lock을 반납해야만 다른 쓰레드가 수행 가능
+      - 모든 객체는 lock을 하나씩 가지고 있음
+    - synchronized를 이용한 동기화
+      1. 메소드 전체를 임계 영역으로 지정
+        - ```java
+          public synchronized void sum() { ... }
+          ```
+      2. 특정한 영역을 임계 영역으로 지정
+        - ```java
+          synchronized(객체의 참조변수) { ... }
+          ```
+    - 쓰레드가 락을 보유한 채로 오랜시간 지체되는 것을 방지하기 위한 메소드( 동기화 블록 내에서만 사용 가능)
+      - wait()
+        - 쓰레드가 락을 반납하고 기다리게 함
+        - 해당 객체 대기실(waiting pool)에서 통지를 기다림
+      - notify()
+        - 해당 객체 대기실(waiting pool)에 있는 쓰레드 중에서 임의의 쓰레드에게 통지 해줌
+      - notifyAll()
+        - 해당 객체 대기실(waiting pool)에 있는 모든 쓰레드에게 통지해줌
+        - 그래도 lock을 얻는 쓰레드는 하나
+      - ```java
+        import java.util.ArrayList;
+      
+        class Customer implements Runnable {
+          private Table table;
+          private String food;
+          Customer(Table table, String food) {
+            this.table = table;
+            this.food = food;
+          }
+          
+          public void run() {
+            while(true) {
+              try { Thread.sleep(100); } catch(InterruptedException e) {}
+              String name = Thread.currentThread().getName();
+              table.remove(food);
+              System.out.println(name + " ate a " + food);
+            }
+          }
+        }
+        
+        class Cook implements Runnable {
+          private Table table;
+          Cook(Table table) { this.table = table; }
+          
+          public void run() {
+            while(true) {
+              int idx = (int)(Math.random() * table.dishNum());
+              table.add(table.dishNames[idx]);
+              try { Thread.sleep(10); } catch(InterruptedException e) {}
+            }
+          }
+        }
+        
+        class Table { 
+          String[] dishNames = { "donut", "donut", "burger" };
+          final int MAX_FOOD = 6;
+          private ArrayList<String> dishes = new ArrayList<>();
+        
+          public synchronized void add(String dish) {
+            while(dishes.size >= MAX_FOOD) {
+              String name = Thread.currentThread().getName();
+              System.out.println(name+" is waiting.");
+              try {
+                wait(); // COOK쓰레드를 기다리게 함
+                Thread.sleep(500);
+              } catch(InterruptedException e) {}
+            }
+            dishes.add(dish);
+            notify();
+            System.out.println("Dishes:" + dishes.toString());
+          }
+        
+          public void remove(String dishName) {
+            synchronized(this) {
+              String name = Thread.currentThread().getName();
+              while(dishes.size()==0) {
+                System.out.println(name +" is waiting.");
+                try {
+                  wait(); // CUSTOMER 쓰레드를 기다리게 함
+                  Thread.sleep(500);
+                } catch(InterruptedException e) {}
+              }
+        
+              while(true) {
+                for (int i=0; i<dishes.size(); i++) {
+                  if(dishName.equals(dishes.get(i)) {
+                    dishes.remove(i);
+                    notify(); // 잠자고 있는 COOK을 깨우기 위함
+                    return;
+                  }
+                }
+                try {
+                  System.out.println(name + "is waiting.");
+                  wait(); // 원하는 음식이 없는 CUSTOMER 쓰레드를 기다리게 함
+                  Thread.sleep(500);
+                } catch(InterruptedException e) {}
+              }
+            }
+          }
+          public int dishNum() {
+            return dishNames.length;
+          }
+        }
+        
+        class Main {
+          public static void main(String[] args) throws Exception {
+            Table table = new Table();
+        
+            new Thread(new Cook(table), "COOK").start();
+            new Thread(new Customer(table, "donut"), "CUSTOMER1").start();
+            new Thread(new Customer(table, "burger"), "CUSTOMER2").start();
+            Thread.sleep(2000);
+            System.exit(0);
+          }
+        }                 
+        ```
+      - ```
+        ...
+        Dishes: [donut, donut, donut, donut, donut, donut]
+        COOK is waiting.
+        CUST2 is waiting.
+        CUST1 ate a donut
+        Dishes: [donut, donut, donut, donut, donut, donut]
+        CUST2 is waiting. <-- 원하는 음식이 없어서 기다림
+        COOK is waiting.  <-- 테이블이 가득차서 기다림
+        CUST1 ate a donut <-- 테이블의 음식이 소비되어서 notify()가 호출됨
+        CUST2 is waiting. <-- 요리사가 아닌 손님이 통지받고, 원하는 음식이 없어서 다시 기다림
+        CUST1 ate a donut <-- 테이블의 음식이 소비되어서 notify()가 호출됨
+        Dishes: [donut, donut, donut, donut, donut] <-- 요리사가 통지받고 음식 추가
+        CUST2 is waiting. <-- 음식추가 통지를 받았으나 원하는 음식이 없어서 기다림
+        Dishes: [donut, donut, donut, donut, donut, burger] <-- 요리사가 음식추가(활동 중)
+        CUST1 ate a donut
+        CUST2 ate a burger <-- 음식추가 통지를 받고, 원하는 음식을 소비
+        Dishes: [donut, donut, donut, donut, donut] <-- 요리사가 음식추가(활동 중)
+        ...
+        ```
+        - 다만, notify()는 그저 waiting pool에서 대기 중인 쓰레드 중 하나를 임의로 선택해서 통지할 뿐, 요리사 쓰레드를 선택해서 통지할 수 없다
+        - 손님 쓰레드가 통지받으면 lock을 얻어도 여전히 자신이 원하는 음식이 없어, 다시 waiting pool에 들어가게 된다
+
+### 람다와 스트림
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
