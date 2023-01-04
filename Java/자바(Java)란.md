@@ -1605,12 +1605,6 @@
         
         int total = stream.count() // 요소 개수 세기 (최종 연산)
         int total2 = Stream.of(strArr).distinct().sort().count();
-        
-        // 스트림에 저장된 요소들을 T[]타입의 배열로 변환하려면 toArray()를 사용하면 됨
-        // 매개변수를 지정하지 않으면 반환되는 배열의 타입은 Object[]
-        Student[] stuNames = stuStream.toArray(Student[]::new);
-        Student[] stuNames = stuStream.toArray(); // 에러.
-        Object[] stuNames = stuStream.toArray();  // ok.
         ```
     - 중간 연산 메소드
       - ![image](https://user-images.githubusercontent.com/15611500/210066800-6cae8c45-d897-412d-968c-1f6102f9367d.png)
@@ -1748,8 +1742,14 @@
           ```
     - 최종 연산 메소드
       - ![image](https://user-images.githubusercontent.com/15611500/210066907-435911ba-cc69-4878-820c-df8be229278f.png)
-      - forEach()
-        - ```void forEach(Consumer<? super T> action)```
+      - toArray()
+        - 스트림에 저장된 요소들을 T[]타입의 배열로 변환하려면 toArray()를 사용하면 됨
+        - 매개변수를 지정하지 않으면 반환되는 배열의 타입은 Object[]
+          - ```java
+            Student[] stuNames = stuStream.toArray(Student[]::new);
+            Student[] stuNames = stuStream.toArray(); // 에러.
+            Object[] stuNames = stuStream.toArray();  // ok.
+            ````
       - allMatch(), anyMatch(), noneMatch()
         - 모든 요소가 일치하면 참, 하나의 요소라도 일치하면 참, 모든 요소가 불일치하면 참
           - ```java
@@ -2055,31 +2055,445 @@
     - ![image](https://user-images.githubusercontent.com/15611500/210066932-59c25415-f9a1-4823-bc54-5eadc197da19.png)
     - ![image](https://user-images.githubusercontent.com/15611500/210066758-fc053e4f-18ff-4e3a-a5be-6ad9b19bca52.png)
     
+
 ## 입출력 I/O
+- I/O의 스트림(stream)
+  - 입출력을 수행하기 위해 데이터를 운반하는데 사용되는 연결통로
+  - 단방향 통신만 가능하기 때문에 입/출력을 동시에 할 수 없음
+  - 큐(queue)와 같으니 FIFO구조로 되어 있음
+  - 바이트(byte) 기반 스트림
+    - (Input/Output)Stream: 바이트 기반 스트림의 조상
+      - ![image](https://user-images.githubusercontent.com/15611500/210561937-afc3c2b6-d73e-4f3f-b7d6-8f16861d115b.png)
+      - ![image](https://user-images.githubusercontent.com/15611500/210561993-d31f65ff-3f4b-45b4-9b7a-4285664817e5.png)
+    - File(Input/Output)Stream: 파일
+      - ![image](https://user-images.githubusercontent.com/15611500/210561964-b469d109-0dea-43a2-b50f-d778521f550c.png)
+      - ```java
+        FileInputStream fis = new FileInputStream("FileViewer.java");
+        FileOutputStream fos = new FileOutputStream("FileCopy.txt");
+      
+        int data = 0;
+        while((data=fis.read())!=-1) {
+          fos.write(data);
+          char c = (char)data; //반환값이 int형이지만 0~255(1byte)범위의 정수값이다
+          System.out.print(c);
+        }
+        fis.close();
+        fos.close();
+        ```
+    - ByteArray(Input/Output)Stream: 메모리(byte배열)
+      - ```java
+        byte[] inSrc = {0,1,2,3,4,5,6,7,8,9};
+        byte[] outSrc = null;
+        byte[] temp = null;
+        ByteArrayInputStream input = null;
+        ByteArrayOutputStream output = null;
+      
+        //Ex1
+        input = new ByteArrayInputStream(inSrc);
+        output = new ByteArrayOutputStream();
+        int data = 0;
+        while((data=input.read()) != -1)
+          output.write(data);
+        outSrc = output.toByteArray(); //{0,1,2,3,4,5,6,7,8,9}
+    
+        //Ex2  
+        temp = new byte[10];
+        input = new ByteArrayInputStream(inSrc);
+        output = new ByteArrayOutputStream();
+        input.read(temp, 0, temp.length); //읽어 온 데이터를 배열 temp에 담는다
+        output.write(temp, 5, 5); //temp[5]부터 5개의 데이터를 write한다
+        outSrc = output.toByteArray(); //{5,6,7,8,9}
+      
+        //Ex3
+        temp = new byte[4];
+        input = new ByteArrayInputStream(inSrc);
+        output = new ByteArrayOutputStream();
+        try {
+          while(input.available() > 0) { //블락킹(blocking)없이 읽어 올 수 있는 바이트 수를 반환
+            int len = input.read(temp); //읽어온 만큼의 len을 반환
+            output.write(temp, 0, len);
+            outSrc = output.toByteArray();
+          }
+        } catch (IOException e) {}
+        ```
+    - Piped(Input/Output)Stream: 프로세스
+    - Audio(Input/Output)Stream: 오디오장치
+  - 문자 기반 스트림
+    - 입출력의 단위가 2byte (java에서 한 문자를 의미하는 char형의 byte크기)
+      - 여러 종류의 인코딩과 유니코드(UTF-16)간의 변환을 자동적으로 처리
+    - (Reader/Writer): 문자 기반 스트림의 조상
+      - ![image](https://user-images.githubusercontent.com/15611500/210561835-3f79fb41-428e-45f7-9b9e-e6d71a6ac1b2.png)
+      - ![image](https://user-images.githubusercontent.com/15611500/210561812-c2f0e5f6-0f21-400a-9fa0-a0122153f71c.png)
+    - File(Reader/Writer)
+      - ```java
+        try {
+          FileReader fr = new FileReader("test.txt");
+          FileWriter fw = new FileWriter("convert.txt");
+        
+          int data = 0;
+          while((data=fr.read())!=-1) {
+            if(data!='\t' && data!='\n' && data!=' ' && data!='\r')
+              fw.write(data);
+            System.out.print((char)data);
+          }
+          fr.close();
+          fw.close();
+        } catch (IOException e) {
+          e.printStrackTrace();
+        }
+        ```
+    - String(Reader/Writer)
+      - ```java
+        StringReader input = new StringReader("ABCD");
+        StringWriter output = new StringWriter();
+        
+        int data = 0;
+        try {
+          while((data=input.read())!=-1)
+            output.write(data);
+        } catch (IOException e) {]
+        ```
+    - CharArray(Reader/Writer)
+    - Piped(Reader/Writer)
+  - 보조 스트림
+    - ![image](https://user-images.githubusercontent.com/15611500/210562021-663187e1-6c49-4479-a6b1-d8aea8052d84.png)
+    - 실제 데이터를 주고받는 스트림은 아니고, 스트림의 기능을 향상키시거나 새로운 기능을 추가
+    - Filter(Input/Output)Stream: 대부분의 보조 (Input/Output)스트림의 조상
+    - Buffered(Input/Output)Stream
+      - ![image](https://user-images.githubusercontent.com/15611500/210561918-8dbf173d-54a6-4920-ace4-a26205a69f14.png)
+      - ![image](https://user-images.githubusercontent.com/15611500/210561904-77dd5576-4985-4593-9ff9-29cf6ab7a05b.png)
+      - ```java
+        try {
+          // 기반 스트림
+          FileInputStream fis = new FileInputStream("test.txt");
+          FileOutputStream fos = new FileOutputStream("123.txt");
+          
+          // 보조 스트림(버퍼, 바이트 배열을 제공)
+          BufferedInputStream bis = new BufferedInputStream(fis);
+          BufferedOutputStream bos = new BufferedOutputStream(fos, 5); //버퍼 크기를 5로 지정  
+          bis.read();
+          for(int i='1'; i<='9'; i++)
+            bos.write(i); //파일 123.txt에 1부터 9까지 출력
+          bos.close(); // 버퍼에 남아있는 [6,7,8,9]가 출력된다
+          // fos.close(); // bos.close()를 호출하지 않으면 [1,2,3,4,5]만 출력됨
+          bis.close(); // 기반 스트림의 close()를 자동으로 호출하여, fis는 자동으로 닫힘
+        } catch (IOException e) {
+          e.printStrackTrack();
+        }
+        ```
+    - Buffered(Reader/Writer)
+      - ```java
+        try {
+          FileReader fr = new FileReader("test.java");
+          BufferedReader br = new BufferedReader(fr);
+        
+          String line = "";
+          for(int i=1; (line=br.readLine())!=null; i++)
+            if(line.indexOf(";")!=-1) // ";"를 포함한 라인을 출력
+              System.out.println(i + ":" + line);
+          br.close();
+        } catch (IOException e) {}
+        ```
+    - SequenceInputStream: 여러 개의 입력 스트림을 연속적으로 연결
+      - ![image](https://user-images.githubusercontent.com/15611500/210561885-1a1fa6ba-7eb0-47ac-9223-dfb7686885c3.png)
+      - ```java
+        Vector v = new Vector();
+        v.add(new ByteArrayInputStream(new byte[]{0,1,2}));
+        v.add(new ByteArrayInputStream(new byte[]{3,4,5}));
+        v.add(new ByteArrayInputStream(new byte[]{6,7,8}));
+        // vector에 저장된 순서대로 입력됨
+        SequenceInputStream input = new SequenceInputStream(v.elements());
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+          
+        int data = 0;
+        try {
+          while((data=input.read())!=-1) {
+            output.write(data);
+          }
+        } catch (IOException e) {}
+        byte[] outSrc = output.toByteArray); //[0,1,2,3,4,5,6,7,8]
+        ```
+    - InputStreaReader, OutputStreamWriter
+      - ![image](https://user-images.githubusercontent.com/15611500/210561727-3d9c2ff9-67f9-4e9d-9bcd-bb1260404dff.png)
+      - 바이트기반 스트림을 문자기반 스트림으로 연결시켜주는 역할
+      - 인코딩을 지정하지 않으면 OS에서 사용하는 인코딩으로 데이터를 저장
+      - ```java
+        String line = "";
+        try {
+          InputStreamReader isr = new InputStreamReader(System.in);
+          BufferedReader br = new BufferedReader(isr);
+          System.out.println(isr.getEncoding()); // MS949(사용중인 OS의 인코딩, windows)
+        
+          do {
+            System.out.print("문장을 입력하세요. 마치시려면 q를 입력하세요.>");
+            line = br.readLine();
+            System.out.println("입력하신 문장: " + line);
+          } while(!line.equalsIgnoreCase("q"));
+        } catch(IOException e) {}
+        ```
+    - PrintStream: 향상된 기능인 PrintWriter가 나옴
+      - ![image](https://user-images.githubusercontent.com/15611500/210561860-a6ae8ade-9f8f-40eb-ba48-612fb634b01a.png)
+    - Data(Input/Output)Stream
+    - PushbackInputStream
+- 표준 입출력(standard I/O)
+  - 콘솔(console, 도스창)을 통한 데이터 입력과 출력을 의미
+  - System.in(InputStream), System.out(PrintStream), System.err(PrintStream)를 제공
+  - setIn(), setOut(), setErr()를 사용해 콘솔 이외에 다른 입출력 대상으로 변경 가능
+    - ```java
+      try {
+        FileOutputStream fos = new FileOutputStream("test.txt");
+        PrintStream ps = new PrintStream(fos);
+        System.setOut(ps); // System.out의 출력대상을 test.txt파일로 변경
+      } catch(FileNotFoundException e) {}
+      ```
+- File 클래스
+  - ![image](https://user-images.githubusercontent.com/15611500/210561758-4b01ed6f-be98-4dd0-9639-d8cca17b2b33.png)
+  - 파일과 디렉토리를 다룰 수 있게 하는 클래스
+    - ```java
+      File f = new File("C:\\jdk.18\\work\\ch15\\Ex15.java");
+      // File nf = new File("C:\\jdk.18\\work\\ch15", "NewFile.java");
+      // nf.createNewFile(); // 새로운 파일 생성
+      String fileName = f.getName();
+      int pos = fileName.lastIndexOf(".");
+      
+      System.out.println("경로를 제외한 파일이름 - " + f.getName()); // Ex15.java
+      System.out.println("확장자를 제외한 파일이름 - " + fileName.substring(0, pos); // Ex15
+      System.out.println("확장자 - " + fileName.substring(pos + 1); // .java 
+      System.out.println("경로를 포함한 파일이름 - " + f.getPath()); // C:\jdk.18\work\ch15\Ex15.java
+      System.out.println("파일이 속해 있는 디렉토리 - " + f.getParent()); // C:\jdk.18\work\ch15
+      System.out.println(" - " + ); // 
+      ```
+    - ```java
+      File f = new File("C:\\jdk.18\\work\\ch15");
+      if(!f.exist() || !f.isDirectory()) {
+        System.out.println("유효하지 않은 디렉토리입니다");
+        System.exit(0);
+      }
+      
+      File[] files = f.listFiles();
+      for(int i=0; i<files.length; i++) {
+        String fileName = files[i].getName();
+        if(files[i].isDirectory()) {
+          System.out.println("[" + fileName + "]");
+        } else {
+          System.out.println(fileName);
+        }
+      }
+      ```
+- 직렬화(serialization), 역직렬화(deserialization)
+  - 객체를 데이터 스트림을 만들거나, 스트림으로부터 데이터를 읽어서 객체를 만드는 것
+  - 객체는 클래스 변수나 메소드는 포함되지 않고, 오직 인스턴스변수들로만 구성되있음
+  - Object(Input/Output)Stream
+    - ![image](https://user-images.githubusercontent.com/15611500/210561784-e9188118-0222-4652-aeff-7f772e7c85d3.png)
+    - 기반 스트림을 필요로 하는 보조스트림
+      - ```java
+        FileOutputStream fos = new FileOutputStream("objfile.ser");
+        ObjectOutputStream out = new ObjectOutputStream(fos);
+        out.writeObject(new UserInfo());
+      
+        FileInputStream fis = new FileInputStream("objfile.ser");
+        ObjectInputStream in = new ObjectInputStream(fis);
+        UserInfo info = (UserInfo)in.readObject();
+        ```
+      - ```java
+        try {
+          FileOutputStream fos = new FileOutputStream("UserInfo.ser");
+          BufferedOutputStream bos = new BufferedOutputStream(fos);
+          ObjectOutputStream out = new ObjectOutputStream(bos);
+      
+          UserInfo u1 = new UserInfo("Man","1234",30);
+          UserInfo u2 = new UserInfo("Woman","1111",20);
+          ArrayList<UserInfo> list = new ArrayList<>();
+          list.add(u1);
+          list.add(u2);
+        
+          out.writeObject(u1);
+          out.writeObject(u2);
+          out.writeObject(list);
+          out.close();
+        } catch(IOException e) {}
+        
+        try {
+          FileInputStream fis = new FileInputStream("UserInfo.ser");
+          BufferedInputStream bis = new BufferedInputStream(fis);
+          ObjectInputStream in = new ObjectInputStream(bis);
+      
+          // 객체를 읽을 때는 출력한 순서와 일치해야 함
+          UserInfo u1 = (UserInfo)in.readObject();
+          UserInfo u2 = (UserInfo)in.readObject();
+          ArrayList list = (ArrayList)in.readObject();
+        
+          in.close();
+        } catch(IOException e) {}
+        ```
+    - 직렬화하고자 하는 객체의 클래스에 직접 구현해 주어야 작업시간의 단축이 가능
+      - ```java
+        private void writeObject(ObjectOutputStream out) throws IOException {
+          ... //직렬화
+        }
+        private void readObject(ObjectInputStream in) throws IOException {
+          ... //역직렬화
+        }
+        ```
+  - 직렬화가 가능한 클래스 만들기: ```java.io.Serializable 인터페이스 구현```
+      - ```java
+        public class UserInfo implements java.io.Serializable {
+            ...
+        }
+        ```
+      - 아무 내용이 없지만 직렬화를 고려하여 작성한 클래스인지 판단하는 기준이 됨 
+      - 상속받은 조상 클래스가 Serializable인터페이스를 구현하였으면 직렬화 가능
+      - 조상클래스가 Serializable인터페이스를 구현하지 않았다면, 조상클래스에 정의된 인스턴스변수는 직렬화 대상에서 제외됨
+        - Object객체(new Object())는 직렬화 대상이 안됨
+  - 직렬화 대상에서 제외시키기: ```transient 제어자 사용``` 
+    - transient 제어자를 붙이면 직렬화 대상에서 제외 가능
+    - 직렬화할 수 없는 클래스의 객체를 인스턴스 변수가 참조하고 있을 경우 직렬화 안됨
+      - ```java
+        public class UserInfo implements java.io.Serializable {
+          String name;
+          int age;
+          transient String password;
+          transient Object obj = new Object();
+        }
+        ```
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+## 네트워킹
+- InetAddress 클래스
+  - ![image](https://user-images.githubusercontent.com/15611500/210561651-d3f6aa3d-5225-4442-bbb9-b449fa86e91b.png)
+- URL 클래스
+  - ![image](https://user-images.githubusercontent.com/15611500/210561580-d08c9dbb-d26e-467d-8180-edde9200eb97.png)
+  - URL(Uniform Resource Locator)은 서버들이 제공하는 자원에 접근할 수 있는 주소를 표현한 것
+    - 형태: ```프로토콜://호스트명:포트번호/경로명/파일명?쿼리스트링#참조```
+      - ```http://www.naver.com:80/sample/hello.html?referer=codechobo#index1```
+- URLConnection 클래스
+  - ![image](https://user-images.githubusercontent.com/15611500/210561526-c4233a0c-84e8-4d94-962e-190d45e6e55e.png)
+  - ![image](https://user-images.githubusercontent.com/15611500/210561702-020a7b7c-f37c-473a-b99f-0096fa15b628.png)
+  - 어플리케이션과 URL간의 통신연결을 나타내는 추상클래스
+  - 연결하고자하는 자원에 접근하여 읽고 쓰기를 함
+    - ```java
+      URL url = null;
+      BufferedReader input = null;
+      String address = "http://www.codechobo.com/sample/hello.html";
+      String line = "";
+      
+      try {
+        url = new URL(address);
+        input = new BufferedReader(new InputStreamReader(url.openStream()));
+      
+        while((line=input.readLine())!=null)
+          System.out.println(line);
+        input.close();
+      } catch (Exception e) {}
+      ```
+- 소켓(socket) 프로그래밍
+  - ![image](https://user-images.githubusercontent.com/15611500/210561616-12475253-a3a1-424b-b3a9-2a97d5260036.png)
+  - TCP
+    - ```java
+      public class TcpIpServer {
+        public static void main(String args[]) {
+          ServerSocket serverSocker = null;
+      
+          try {
+            // 서버소켓을 생성하여 7777번 포트와 결합(bind)시킨다
+            serverSocket = new ServerSocket(7777);
+          } catch(IOException e) {}
+      
+          while(true) {
+            try {
+              // 서버소켓은 클라이언트의 연결요청이 올 때까지 실행을 멈추고 계속 기다린다
+              // 클라이언트의 연결요청이 오면 클라이언트 소켓과 통신할 새로운 소켓을 생성한다
+              Socket socket = serverSocket.accept();
+              System.out.println(socket.getInetAddress()+"로 부터 연결요청이 들어왔습니다.");
+            
+              // 소켓의 출력스트림을 얻는다
+              OutputStream out = socket.getOutputStream();
+              DataOutputStream dos = new DataoutputStream(out);
+      
+              // 원격 소켓(remote socket)에 데이터를 보낸다
+              dos.writeUTF("Test Message from Server.");
+            
+              dos.close();
+              socket.close();
+            } catch (IOException e) {}
+          }
+        }
+      }
+      ```
+    - ```java
+      public class TcpIpClient {
+        public static void main(String[] args) {
+          try {
+            String serverIp = "127.0.0.1";
+      
+            // 소켓을 생성하여 연결을 요청한다
+            Socket socket = new Socket(serverIp, 7777);
+      
+            // 소켓의 입력스트림을 얻는다
+            InputStream in = socket.getInputStream();
+            DataInputStream dis = new DataInputStream(in);
+      
+            // 소켓으로 부터 받은 데이터를 출력한다
+            System.out.println(dis.readUTF());
+      
+            dis.close();
+            socket.close();
+          } catch (ConnectException ce) {
+            ce.printStackTrace();
+          } catch (Exception e) {}
+        }
+      }
+      ```
+  - UDP
+    - ```java
+      public class UdpClient {
+        public static void main(String[] args) {
+          try {
+            DatagramSocket datagramSocket = new DatagramSocket();
+            InetAddress serverAddress = InetAddress.getByName("127.0.0.1");
+      
+            // 데이터가 저장될 공간으로 byte배열 생성
+            byte[] msg = new byte[100];
+            DatagramPacket outPacket = new DatagramPacket(msg, 1, serverAddress, 7777);
+            DatagramPacket inPacket = new DatagramPacket(msg, msg.length);
+      
+            datagramSocket.send(outPacket);   // DatagramPacket을 전송
+            datagramSocket.receive(inPacket); // DatagramPacket을 수신
+            System.out.println(new String(inPacket.getData());
+      
+            datagramSocket.close();
+          } catch(Exception e) {}
+        }
+      }      
+      ```
+    - ```java
+      public class UdpServer {
+        public statci void main(String[] args) {
+          try {
+            // 포트 7777번을 사용하는 소켓을 생성
+            Datagram Socket socket = new DatagramSocket(7777);
+            DatagramPacket inPacket, outPacket;
+      
+            byte[] inMsg = new byte[10];
+            byte[] outMsg;
+      
+            while(true) {
+              // 데이터를 수신하기 위한 패킷 생성
+              inPacket = new DatagramPacket(inMsg, inMsg.length);
+              socket.receive(inPacket); // 패키을 통해 데이터를 수신
+        
+              // 수신한 패킷으로 부터 client의 주소와 포트를 얻는다
+              InetAddress address = inPacket.getAddress();
+              int port = inPacket.getPort();
+      
+              // 전달할 메시지를 byte array로 변환
+              String time = "[11:22:33]";
+              outMsg = time.getBtyes();
+      
+              outPacket = new DatagramPacket(outMsg, outMsg.length, address, port);
+              socket.send(outPacket);
+            }
+          } catch (Exception e) {}
+        }
+      }
+      ```
 
