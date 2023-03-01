@@ -2,22 +2,20 @@
 
 ### 📖 Contents
 
-- Java 언어의 특징에 대하여 서술하시오
+- Java 언어의 특징은?
   - [답](https://github.com/kimho1wq/TIL/blob/main/Java/00.%20%EC%9E%90%EB%B0%94(Java).md#java-%EC%96%B8%EC%96%B4%EC%9D%98-%ED%8A%B9%EC%A7%95)
-- JVM(java virtual machine)에 대해 서술하시오
+- JVM(Java Virtual Machine) 이란?
   - [답](https://github.com/kimho1wq/TIL/blob/main/Java/00.%20%EC%9E%90%EB%B0%94(Java).md#jvmjava-virtual-machine)
 - 동적 로딩(Dynamic Loading) 이란?
-  - [답]()
+  - [답](https://github.com/kimho1wq/TIL/blob/main/Java/00.%20%EC%9E%90%EB%B0%94(Java).md#%EB%8F%99%EC%A0%81-%EB%A1%9C%EB%94%A9dynamic-loading)
 - 링킹(Linking)과 링커(Linker) 란?
+  - [답](https://github.com/kimho1wq/TIL/blob/main/Java/00.%20%EC%9E%90%EB%B0%94(Java).md#%EB%A7%81%ED%82%B9linking%EA%B3%BC-%EB%A7%81%EC%BB%A4linker)
+- 래퍼 클래스(Wrapper Class) 란?
   - [답]()
-- 래퍼 클래스(wrapper class) 란?
+- 리플렉션(Reflection) 이란?
   - [답]()
-- 상속, 캡슐화, 다형성 이란?
+- Object Oriented Programming(OOP)의 4가지 특징
   - [답]()
-- java의 리플렉션 이란?
-  - [답]()
-- OOP의 4가지 특징
-- OOP의 5대 원칙
 - 객체지향 프로그래밍과 절차지향 프로그래밍의 차이
 - 객체지향이란
 - 객체지향의 장점(강점)
