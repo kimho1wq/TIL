@@ -2,16 +2,20 @@
 
 ### 📖 Contents
 
-- Java 언어의 특징을 아는 대로 서술하시오
+- Java 언어의 특징에 대하여 서술하시오
   - [답](https://github.com/kimho1wq/TIL/blob/main/Java/00.%20%EC%9E%90%EB%B0%94(Java).md#java-%EC%96%B8%EC%96%B4%EC%9D%98-%ED%8A%B9%EC%A7%95)
 - JVM(java virtual machine)에 대해 서술하시오
-  - [답](https://github.com/kimho1wq/TIL/blob/main/Java/00.자바(Java).md#java-virtual-machine)
-- java의 접근 제어자의 종류와 특징
-- java의 데이터 타입
-- Wrapper class
-- 자바에서 제공하는 Wrapper class
-- 박싱(Boxing), 언박싱(Unboxing)
-- 오토 박싱(AutoBoxing)과 오토 언박싱(AutoUnBoxing)
+  - [답](https://github.com/kimho1wq/TIL/blob/main/Java/00.%20%EC%9E%90%EB%B0%94(Java).md#jvmjava-virtual-machine)
+- 동적 로딩(Dynamic Loading) 이란?
+  - [답]()
+- 링킹(Linking)과 링커(Linker) 란?
+  - [답]()
+- 래퍼 클래스(wrapper class) 란?
+  - [답]()
+- 상속, 캡슐화, 다형성 이란?
+  - [답]()
+- java의 리플렉션 이란?
+  - [답]()
 - OOP의 4가지 특징
 - OOP의 5대 원칙
 - 객체지향 프로그래밍과 절차지향 프로그래밍의 차이
@@ -41,6 +45,6 @@
 - String StringBuilder StringBuffer
 - 동기화와 비동기화의 차이
 - java에서 ==와 equals()의 차이
-- java의 리플렉션 이란
+- 
 - Stream이란
 - Lambda란
