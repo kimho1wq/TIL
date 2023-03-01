@@ -1,1 +1,46 @@
 # Java
+
+### 📖 Contents
+
+- Java 언어의 특징을 아는 대로 서술하시오
+  - [답](https://github.com/kimho1wq/TIL/blob/main/Java/00.자바(Java).md#Java-언어의-특징)
+- JVM(java virtual machine)에 대해 서술하시오
+  - [답](https://github.com/kimho1wq/TIL/blob/main/Java/00.자바(Java).md#java-virtual-machine)
+- java의 접근 제어자의 종류와 특징
+- java의 데이터 타입
+- Wrapper class
+- 자바에서 제공하는 Wrapper class
+- 박싱(Boxing), 언박싱(Unboxing)
+- 오토 박싱(AutoBoxing)과 오토 언박싱(AutoUnBoxing)
+- OOP의 4가지 특징
+- OOP의 5대 원칙
+- 객체지향 프로그래밍과 절차지향 프로그래밍의 차이
+- 객체지향이란
+- 객체지향의 장점(강점)
+- 객체지향의 단점(한계)
+- 객체지향적 설계원칙 SOLID
+- 객체지향의 특징
+- java의 non-static 멤버와 static 멤버의 차이
+- ❓java의 main 메서드가 static인 이유
+- java의 final 키워드
+- java의 제네릭과 c++의 템플릿의 차이
+- java의 가비지 컬렉션 처리 방법
+- java9의 default GC
+- java 직렬화와 역직렬화란 무엇인가
+- 클래스 객체 인스턴스의 차이
+- 객체란 무엇인가
+- 오버로딩과 오버라이딩의 차이
+- Call by Reference와 Call by Value의 차이
+- 인터페이스와 추상 클래스의 차이
+- JVM 구조
+- Java Collections Framework
+- java Map 인터페이스 구현체의 종류
+- java Set 인터페이스 구현체의 종류
+- java List 인터페이스 구현체의 종류
+- Annotation
+- String StringBuilder StringBuffer
+- 동기화와 비동기화의 차이
+- java에서 ==와 equals()의 차이
+- java의 리플렉션 이란
+- Stream이란
+- Lambda란
