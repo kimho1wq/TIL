@@ -3,7 +3,7 @@
 ### 📖 Contents
 
 - Java 언어의 특징을 아는 대로 서술하시오
-  - [답](https://github.com/kimho1wq/TIL/blob/main/Java/00.자바(Java).md#Java-언어의-특징)
+  - [답](https://github.com/kimho1wq/TIL/blob/main/Java/00.%20%EC%9E%90%EB%B0%94(Java).md#java-%EC%96%B8%EC%96%B4%EC%9D%98-%ED%8A%B9%EC%A7%95)
 - JVM(java virtual machine)에 대해 서술하시오
   - [답](https://github.com/kimho1wq/TIL/blob/main/Java/00.자바(Java).md#java-virtual-machine)
 - java의 접근 제어자의 종류와 특징
