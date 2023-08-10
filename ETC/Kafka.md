@@ -154,14 +154,46 @@
         Topic: fastcampus       Partition: 0    Leader: 0       Replicas: 0     Isr: 0
       ```
 - Message Producing
-  - ```$ kafka/bin/kafka-console-producer.sh --broker-list 172.31.45.58:9092 --topic fastcampus```
+  - Topic으로 메시지 전달
+    - ```$ kafka/bin/kafka-console-producer.sh --broker-list 172.31.45.58:9092 --topic fastcampus```
+  - key:value property 사용
+    - ```
+      $ kafka/bin/kafka-console-producer.sh --broker-list 172.31.45.58:9092 --topic fastcampus \
+          --property "parse.key=true" --property "key.separator=:"
+      ```
 - Message Consuming
-  - ```$ kafka/bin/kafka-console-consumer.sh --bootstrap-server 172.31.45.58:9092 --topic fastcampus --from-beginning```
+  - Topic으로 메시지 소비
+    - ```$ kafka/bin/kafka-console-consumer.sh --bootstrap-server 172.31.45.58:9092 --topic fastcampus --from-beginning```
+- kafka 성능 테스트
+  - produce 테스트
+    - ```
+      $ kafka/bin/kafka-producer-perf-test.sh --topic stress-test --num-records 1000 \
+          --throughput 1 --producer-pro bootstrap.servers="172.31.45.58:9092" batch.size=1000 \
+          asks=all linger.ms=10000 --record.size 1000
+      ```
+    - batch.size: 메시지를 바로 보내지 않고 대기하였다가 한번에 전송하는 사이즈
+    - linger.ms: batch가 채워질 동안 기다리는 시간, linger 시간이 도달하면 batch가 차지 않아도 전송
+    - acks [0, 1, all]: 메시지가 파티션에 적재되었는지 여부를 판단한다
+      - 0: 적재 여부 관여 x, 1(default): leader partition에 적재되면 정상으로 판단, all: 모든 replica에 적재되는 것을 확인함
+      
 
+### KStream join 
+- Crossing the Streams – Joins in Apache Kafka
+  - ![image](https://github.com/kimho1wq/TIL/assets/15611500/4bfb8ccf-7638-4785-b1e9-7e2ecffa768c)
+  - ![image](https://github.com/kimho1wq/TIL/assets/15611500/e50f8bab-3e38-4043-9360-04ca3e48c2ba)
+  - ![image](https://github.com/kimho1wq/TIL/assets/15611500/fb5b76a7-9f25-4015-9b9b-cff3a99e0046)
 
-
-
-
+### Kafka 상황과 대응
+- Disk Full
+  - 기본적으로 Retention 정책(log.retention.hours)을 잘 조정하여 디스크 사용에 대한 최대 크기를 예상해야 한다
+  - Parition이 계속 생성되지 않도록 allow.auto.create.topic=false 옵션을 주어서 client가 임의로 생성하지 못하도록 해야 한다
+- Disk Skew
+  - 특정 Broker/Disk에 데이터가 몰리는 현상이 발생하면 기본적으로 partition을 re-assgin 하는 것이 좋다
+  - topic간의 데이터 유형이 달라 같은 양의 partition이 있더라도 크기 차이가 날 수 있다
+  - partition 개수를 증가하거나 retention을 줄이는 것이 좋다
+- kafka producer 문제
+  - 메시지가 특정 브로커에 몰려서 보내질 수도 있기 때문에 partition 사용 시 option을 잘 선택해야 한다
+  - default partitioner: round robin(~2.3), sticky(2.4~)
 
 
 

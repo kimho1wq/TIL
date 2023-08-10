@@ -164,6 +164,28 @@
         > zrank rtest p0004
         (nil)
         ```
+- Redis pub/sub
+  - ```
+    > publish chat-test "hello~~!"
+    > publish chat-test "this is chat 1 room"
+    ```
+  - ```
+    > subscribe chat-test
+    1) "subscribe"
+    2) "chat-test"
+    3) (integer) 1
+    1) "message"
+    2) "chat-test"
+    3) "hello~~!"   
+    
+    > psubscribe chat*
+    1) pmessage
+    2) chat*
+    3) chat-test
+    4) "this is chat 1 room" 
+    ```
+    
+
 
 ### Redis Stress Test
 - 기본적으로 설치되어있는 Reids Benchmark를 이용하여 간단한 test가 가능하다
