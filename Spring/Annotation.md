@@ -106,6 +106,7 @@
   - 이 어노테이션은 Bean을 등록하는 설정파일이며, spring.factories에 있는 수많은 설정들이 자동으로 조건에 따라 적용되어 Bean이 생기는 것이다
   - ![image](https://github.com/kimho1wq/TIL/assets/15611500/d65a121f-2586-447c-8e86-09df64227748)
 
+
 ### Spring MVC Annotation
 - @RestController
   - 이 어노테이션의 클래스의 모든 컨트롤러 메소드는 @ResponseBody 어노테이션이 달린 반환 값을 달고 다니게 된다
@@ -207,7 +208,7 @@
   - @Getter @Setter @EqualsAndHashCode @AllArgsConstructor을 포함한 Lombok에서 제공하는 필드와 관련된 모든 코드를 생성한다
 
 
-### JAP Annotation
+### JPA Annotation
 - @Entity
   - 실제 DB의 테이블과 매칭될 Class임을 명시한다
   - Entity Class 이름을 언더스코어 네이밍(_)으로 테이블 이름을 매칭한다
