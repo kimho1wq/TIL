@@ -209,10 +209,13 @@
 
 
 ### JPA Annotation
-- @Entity
+- @Entity(name="테이블 명")
   - 실제 DB의 테이블과 매칭될 Class임을 명시한다
   - Entity Class 이름을 언더스코어 네이밍(_)으로 테이블 이름을 매칭한다
-  - ```SalesManage.java -> sales_manager table```
+    - ```SalesManage.java -> sales_manager table```
+  - public이나 protected 접근지정자인 기본 생성자가 필수이다
+  - final 클래스, enum , interface , inner 클래스에는 사용할 수 없다
+  - Table 컬럼에 매핑한 필드에 final을 사용하면 안 된다
 - @Table
   - Entity Class에 매핑할 테이블 정보를 알려준다
   - Annotation을 생략하면 Class 이름을 테이블 이름 정보로 매핑한다
@@ -220,7 +223,11 @@
   - 해당 테이블의 PK 필드를 나타낸다
 - @GeneratedValue
   - PK의 생성 규칙(Long 타입의 Auto_increment 등)을 나타낸다
-  - ```@GeneratedValue(strategy = GenerationType.IDENTITY)```
+    - IDENTITY: PK 생성을 데이터베이스에게 위임한다(DB에 의존)
+    - SEQUENCE: DB 시퀀스를 사용하여 기본 키 할당(DB에 의존)
+    - TABLE: 키생성 테이블을 만들어서 사용
+    - ```@GeneratedValue(strategy = GenerationType.IDENTITY)```
+    - Oracle은 시퀀스를 제공하고, MySQL은 AUTO_INCREMENT 기능을 제공한다
 - @Column
   - 테이블의 컬럼을 나타내며, 굳이 선언하지 않더라도 해당 Class의 필드는 모두 컬럼이 된다
   - 생략하면 필드명을 사용해서 컬럼명과 매핑되고, 기본값 외에 추가로 변경이 필요한 옵션이 있을 경우 사용한다
