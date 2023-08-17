@@ -479,6 +479,420 @@
 
 
 
+### CORS(Cross-Origin Resource Sharing)
+- 브라우저에서 보안적인 이유로 HTTP 요청을 HTTP-header를 이용해 제한하는 메커니즘
+- cross-origin 이란 다음 중 한가지라도 다른 경우를 의미한다
+  1. 프로토콜: http와 https는 프로토콜이 다르다
+  2. 도메인: domain.com과 other-domain.com은 다르다
+  3. 포트 번호: 8080포트와 3000포트는 다르다
+- CORS가 없으며 모든 곳에서 데이터를 요청할 수 있게 되고, 다른 곳에서 서버를 흉내내며 사용자의 정보를 탈취할 수 있다
+- 요청 헤더 목록
+  - Origin
+  - Access-Control-Request-Method
+    - preflight 요청을 할 때 실제 요청에서 어떤 HTTP method를 사용할 것인지 서버에게 알리기 위해 사용된다
+  - Access-Control-Request-Headers
+    - preflight 요청을 할 때 실제 요청에서 어떤 header를 사용할 것인지 서버에게 알리기 위해 사용된다
+- 응답 헤더 목록
+  - Access-Control-Allow-Origin
+    - 브라우저가 해당 origin이 자원에 접근할 수 있도록 허용하고, *은 credentials이 없는 요청에 한해서 모든 origin에서 접근이 가능하도록 허용한다는 의미이다
+  - Access-Control-Allow-Methods
+    - preflight 요청에 대한 대한 응답으로 허용되는 메서드들을 나타낸다
+  - Access-Control-Allow-Headers
+    - preflight 요청에 대한 대한 응답으로 실제 요청 시 사용할 수 있는 HTTP 헤더를 나타낸다
+- CORS의 동작
+  - Simple requests
+    1. 서버로 요청을 한 후, 응답이 왔을 때 브라우저가 요청한 origin과 응답한 헤더 access-control-request-headers의 값을 비교한다
+    2. 비교한 값이 유효한 요청이라면 리소스를 응답하고, 유효하지 않은 요청이라면 브라우저에서 이를 막고 에러가 발생한다
+  - Preflight
+    1. Origin 헤더에 현재 요청하는 origin과, Access-Control-Request-Method 헤더에 요청하는 HTTP method와, Access-Control-Request-Headers 요청 시 사용할 헤더, OPTIONS method를 사용해서 내용 없이 헤더만 서버로 요청한다
+    2. 브라우저가 서버에서 응답한 헤더가 유효한 요청이라면 원래 요청으로 보내려던 요청을 다시 보내여 리소스를 응답받는다
+
+
+
+  
+### 세션 vs 토큰 기반의 인증 시스템
+- 세션(Session)
+  - 서버 측에서 사용자들의 정보를 기억하기 위해 세션을 유지하며, 메모리나 디스크 등을 통해 관리한다
+  - 서버(세션) 기반의 인증 시스템은 클라이언트로부터 요청을 받으면, 클라이언트의 상태를 계속 유지하며 이러한 서버를 Sateful 서버라고 한다
+  - ![image](https://github.com/kimho1wq/TIL/assets/15611500/e4ef0107-2ef6-4e0d-87a4-e0d96313e05f)
+  - 사용자의 정보를 메모리나 DB에 저장하는데 서버가 확장될 수록 부하가 커지며, 확장을 위해 세션을 분산시키는 시스템을 설계해야 한다
+- 토큰(Token)
+  - 인증받은 사용자들에게 토큰을 발급하고, 서버에 요청을 할 때 헤더에 토큰을 함께 보내도록 하여 유효성 검사를 하는 방식
+  - 서버 기반의 인증 시스템과 토큰이 클라이언트 측에 저장되기 때문에 서버는 Stateless한 구조를 갖는다
+  - ![image](https://github.com/kimho1wq/TIL/assets/15611500/b2302b97-cc36-4fec-995d-8a5dc49cc678)
+  - 클라이언트와 서버의 연결고리가 없기 때문에 확장하기에 매우 적합하다
+  - 토큰 기반의 인증 시스템에서는 토큰에 선택적인 권한만 부여하여 발급할 수 있으며 OAuth의 경우 다른 서비스에 대한 확장성(Extensibility)도 있다
+  - 서버 기반 인증 시스템의 문제점 중 하나인 CORS를 해결할 수 있는데, 이런 구조를 통해 assests 파일(Image, html, css, js 등)은 모두 CDN에서 제공하고, 서버 측에서는 API만 다루도록 설계할 수 있다
+
+
+
+
+### JWT(Json Web Token)
+- JWT(Json Web Token)란 Json 포맷을 이용하여 사용자에 대한 속성을 저장하는 Claim 기반의 Web Token이다
+- JWT는 토큰 자체를 정보로 사용하는 Self-Contained 방식으로, 주로 회원 인증이나 정보 전달에 사용된다
+- JWT는 HTTP 통신을 할 때마다 헤더에 담아서 보내야 하므로 static 변수 또는 로컬 스토리지에 저장하게 된다
+- 로그아웃 시 로컬 스토리지의 JWT를 제거하고, 사용했던 토큰을 blacklist라는 DB 테이블에 넣어 해당 토큰의 접근을 막는다
+- JWT 구조
+  - Header, Payload, Signature의 3 부분으로 이루어지며 각각의 부분을 이어 주기 위해 '.' 구분자를 사용하여 구분한다
+  - Json 형태인 각 부분은 Base64Url로 인코딩 되어 표현된다
+  - Base64Url는 암호화된 문자열이 아니기 때문에 같은 문자열에 대해 항상 같은 인코딩 문자열을 반환한다
+  - ![image](https://github.com/kimho1wq/TIL/assets/15611500/0e5951bd-034f-49d1-96ef-ef58cbb15831)
+  - Header(헤더)
+    - typ: 토큰의 타입을 지정(ex. JWT)
+    - alg: 서명(Signature)를 해싱하기 위한 알고리즘을 지정하며 토큰 검증에도 사용(ex, HS256 or RSA)
+  - PayLoad(페이로드): 토큰에서 사용할 정보의 조각들인 클레임(Claim)이 담겨 있으며 Json형태로 다수의 정보를 넣을 수 있다
+  - Signature(서명): 토큰을 인코딩하거나 유효성 검증을 할 때 사용하는 암호화 코드이다
+- 생성된 토큰은 HTTP 통신을 할 때 key-value 형태로 사용된다
+  - ```json
+    { 
+        "Authorization": "Bearer {생성된 토큰 값}"
+    }
+    ```
+- JWT의 단점
+  - 토큰 자체에 정보를 담고 있고, 정보가 많아질수록 토큰의 길이가 늘어나 네트워크에 부하를 줄 수 있다
+  - 페이로드 자체는 암호화 된 것이 아니기 때문에 JWE(JSON Web Encryption)로 암호화 하거나 중요 데이터를 넣어서는 안된다
+  - 상태를 저장하지 않기(Stateless) 때문에 임의로 삭제가 불가능하므로 토큰 만료 시간을 넣어주어야 한다
+  - 토큰은 클라이언트 측에서 관리하여 저장해서 사용해야 한다
+
+
+### Spring Security + JWT 구현
+- ![image](https://github.com/kimho1wq/TIL/assets/15611500/cdfb7aa7-1d76-4460-b97c-adfa4ee96dc0)
+  - https://wildeveloperetrain.tistory.com/57
+- JWT
+  - JwtAuthenticationFilter: 클라이언트 요청 시 JWT 인증을 하기 위해 설치하는 Custom Filter로 UsernamePasswordAuthenticationFilter 이전에 실행된다
+    - ```java
+      @RequiredArgsConstructor
+      public class JwtAuthenticationFilter extends GenericFilterBean {
+
+          private static final String AUTHORIZATION_HEADER = "Authorization";
+          private static final String BEARER_TYPE = "Bearer";
+
+          private final JwtTokenProvider jwtTokenProvider;
+          private final RedisTemplate redisTemplate;
+
+          @Override
+          public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+
+              // 1. Request Header 에서 JWT 토큰 추출
+              String token = resolveToken((HttpServletRequest) request);
+
+              // 2. validateToken 으로 토큰 유효성 검사
+              if (token != null && jwtTokenProvider.validateToken(token)) {
+                  // (추가) Redis 에 해당 accessToken logout 여부 확인
+                  String isLogout = (String)redisTemplate.opsForValue().get(token);
+                  if (ObjectUtils.isEmpty(isLogout)) {
+                      // 토큰이 유효할 경우 토큰에서 Authentication 객체를 가지고 와서 SecurityContext 에 저장
+                      Authentication authentication = jwtTokenProvider.getAuthentication(token);
+                      SecurityContextHolder.getContext().setAuthentication(authentication);
+                  }
+              }
+              chain.doFilter(request, response);
+          }
+
+          // Request Header 에서 토큰 정보 추출
+          private String resolveToken(HttpServletRequest request) {
+              String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
+              if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(BEARER_TYPE)) {
+                  return bearerToken.substring(7);
+              }
+              return null;
+          }
+      }
+      ```
+  - JwtTokenProvider: JWT 토큰 생성, 토큰 복호화 및 정보 추출, 토큰 유효성 검증의 기능이 구현된 클래스
+    - ```java
+      @Component
+      public class JwtTokenProvider {
+
+          private static final String AUTHORITIES_KEY = "auth";
+          private static final String BEARER_TYPE = "Bearer";
+          private static final long ACCESS_TOKEN_EXPIRE_TIME = 30 * 60 * 1000L;              // 30분
+          private static final long REFRESH_TOKEN_EXPIRE_TIME = 7 * 24 * 60 * 60 * 1000L;    // 7일
+
+          private final Key key;
+
+          public JwtTokenProvider(@Value("${jwt.secret}") String secretKey) {
+              byte[] keyBytes = Decoders.BASE64.decode(secretKey);
+              this.key = Keys.hmacShaKeyFor(keyBytes);
+          }
+
+          // 유저 정보를 가지고 AccessToken, RefreshToken 을 생성하는 메서드
+          public UserResponseDto.TokenInfo generateToken(Authentication authentication) {
+              // 권한 가져오기
+              String authorities = authentication.getAuthorities().stream()
+                      .map(GrantedAuthority::getAuthority)
+                      .collect(Collectors.joining(","));
+
+              long now = (new Date()).getTime();
+              // Access Token 생성
+              Date accessTokenExpiresIn = new Date(now + ACCESS_TOKEN_EXPIRE_TIME);
+              String accessToken = Jwts.builder()
+                      .setSubject(authentication.getName())
+                      .claim(AUTHORITIES_KEY, authorities)
+                      .setExpiration(accessTokenExpiresIn)
+                      .signWith(key, SignatureAlgorithm.HS256)
+                      .compact();
+
+              // Refresh Token 생성
+              String refreshToken = Jwts.builder()
+                      .setExpiration(new Date(now + REFRESH_TOKEN_EXPIRE_TIME))
+                      .signWith(key, SignatureAlgorithm.HS256)
+                      .compact();
+
+              return UserResponseDto.TokenInfo.builder()
+                      .grantType(BEARER_TYPE)
+                      .accessToken(accessToken)
+                      .refreshToken(refreshToken)
+                      .refreshTokenExpirationTime(REFRESH_TOKEN_EXPIRE_TIME)
+                      .build();
+          }
+
+          // JWT 토큰을 복호화하여 토큰에 들어있는 정보를 꺼내는 메서드
+          public Authentication getAuthentication(String accessToken) {
+              // 토큰 복호화
+              Claims claims = parseClaims(accessToken);
+
+              if (claims.get(AUTHORITIES_KEY) == null) {
+                  throw new RuntimeException("권한 정보가 없는 토큰입니다.");
+              }
+
+              // 클레임에서 권한 정보 가져오기
+              Collection<? extends GrantedAuthority> authorities =
+                      Arrays.stream(claims.get(AUTHORITIES_KEY).toString().split(","))
+                      .map(SimpleGrantedAuthority::new)
+                      .collect(Collectors.toList());
+
+              // UserDetails 객체를 만들어서 Authentication 리턴
+              UserDetails principal = new User(claims.getSubject(), "", authorities);
+              return new UsernamePasswordAuthenticationToken(principal, "", authorities);
+          }
+
+          // 토큰 정보를 검증하는 메서드
+          public boolean validateToken(String token) {
+              try {
+                  Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
+                  return true;
+              } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
+                  log.info("Invalid JWT Token", e);
+              } catch (ExpiredJwtException e) {
+                  log.info("Expired JWT Token", e);
+              } catch (UnsupportedJwtException e) {
+                  log.info("Unsupported JWT Token", e);
+              } catch (IllegalArgumentException e) {
+                  log.info("JWT claims string is empty.", e);
+              }
+              return false;
+          }
+
+          private Claims parseClaims(String accessToken) {
+              try {
+                  return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(accessToken).getBody();
+              } catch (ExpiredJwtException e) {
+                  return e.getClaims();
+              }
+          }
+
+          public Long getExpiration(String accessToken) {
+              // accessToken 남은 유효시간
+              Date expiration = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(accessToken).getBody().getExpiration();
+              // 현재 시간
+              Long now = new Date().getTime();
+              return (expiration.getTime() - now);
+          }
+      }
+      ``` 
+- Security
+  - WebSecurityConfig: Secutiry 설정을 위한 class로 WebSecurityConfigurerAdapter를 상속받는다
+    - ```
+      @RequiredArgsConstructor
+      @EnableWebSecurity
+      public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+
+          private final JwtTokenProvider jwtTokenProvider;
+          private final RedisTemplate redisTemplate;
+
+          @Override
+          protected void configure(HttpSecurity httpSecurity) throws Exception {
+              httpSecurity
+                      .httpBasic().disable()
+                      .csrf().disable()
+                      .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                      .and()
+                      .authorizeRequests()
+                      .antMatchers("/api/v1/users/sign-up", "/api/v1/users/login", "/api/v1/users/authority", "/api/v1/users/reissue", "/api/v1/users/logout").permitAll()
+                      .antMatchers("/api/v1/users/userTest").hasRole("USER")
+                      .antMatchers("/api/v1/users/adminTest").hasRole("ADMIN")
+                      .and()
+                      .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider, redisTemplate), UsernamePasswordAuthenticationFilter.class);
+                      // JwtAuthenticationFilter를 UsernamePasswordAuthentictaionFilter 전에 적용시킨다.
+          }
+
+          // 암호화에 필요한 PasswordEncoder Bean 등록
+          @Bean
+          public PasswordEncoder passwordEncoder() {
+              return new BCryptPasswordEncoder();
+          }
+      }
+      ```   
+  - CustomUserDetailsService: 인증에 필요한 UserDetailsService interface를 구현하는 클래스로 loadUserByUsername 메서드를 통해 Database에 접근하여 사용자 정보를 가지고 온다
+    - ```
+      @Service
+      @RequiredArgsConstructor
+      public class CustomUserDetailsService implements UserDetailsService {
+
+          private final UsersRepository usersRepository;
+
+          @Override
+          public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+              return usersRepository.findByEmail(username)
+                      .map(this::createUserDetails)
+                      .orElseThrow(() -> new UsernameNotFoundException("해당하는 유저를 찾을 수 없습니다."));
+          }
+
+          // 해당하는 User 의 데이터가 존재한다면 UserDetails 객체로 만들어서 리턴
+          private UserDetails createUserDetails(Users users) {
+              return new User(users.getUsername(), users.getPassword(), users.getAuthorities());
+          }
+      }
+      ``` 
+  - SecurityUtil: 클라이언트 요청 시 JwtAuthenticationFilter에서 인증되어 SecurityContextHolder에 저장된 Authentication 객체 정보를 가져오기 위한 클래스
+    - ```
+      public class SecurityUtil {
+
+          public static String getCurrentUserEmail() {
+              final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+              if (authentication == null || authentication.getName() == null) {
+                  throw new RuntimeException("No authentication information.");
+              }
+              return authentication.getName();
+          }
+      }
+      ``` 
+- UserService
+  - ```java
+    @RequiredArgsConstructor
+    @Service
+    public class UsersService {
+
+        private final UsersRepository usersRepository;
+        private final Response response;
+        private final PasswordEncoder passwordEncoder;
+        private final JwtTokenProvider jwtTokenProvider;
+        private final AuthenticationManagerBuilder authenticationManagerBuilder;
+        private final RedisTemplate redisTemplate;
+
+        public ResponseEntity<?> signUp(UserRequestDto.SignUp signUp) {
+            if (usersRepository.existsByEmail(signUp.getEmail())) {
+                return response.fail("이미 회원가입된 이메일입니다.", HttpStatus.BAD_REQUEST);
+            }
+
+            Users user = Users.builder()
+                    .email(signUp.getEmail())
+                    .password(passwordEncoder.encode(signUp.getPassword()))
+                    .roles(Collections.singletonList(Authority.ROLE_USER.name()))
+                    .build();
+            usersRepository.save(user);
+
+            return response.success("회원가입에 성공했습니다.");
+        }
+
+        public ResponseEntity<?> login(UserRequestDto.Login login) {
+
+            if (usersRepository.findByEmail(login.getEmail()).orElse(null) == null) {
+                return response.fail("해당하는 유저가 존재하지 않습니다.", HttpStatus.BAD_REQUEST);
+            }
+
+            // 1. Login ID/PW 를 기반으로 Authentication 객체 생성
+            // 이때 authentication 는 인증 여부를 확인하는 authenticated 값이 false
+            UsernamePasswordAuthenticationToken authenticationToken = login.toAuthentication();
+
+            // 2. 실제 검증 (사용자 비밀번호 체크)이 이루어지는 부분
+            // authenticate 매서드가 실행될 때 CustomUserDetailsService 에서 만든 loadUserByUsername 메서드가 실행
+            Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+
+            // 3. 인증 정보를 기반으로 JWT 토큰 생성
+            UserResponseDto.TokenInfo tokenInfo = jwtTokenProvider.generateToken(authentication);
+
+            // 4. RefreshToken Redis 저장 (expirationTime 설정을 통해 자동 삭제 처리)
+            redisTemplate.opsForValue()
+                    .set("RT:" + authentication.getName(), tokenInfo.getRefreshToken(), tokenInfo.getRefreshTokenExpirationTime(), TimeUnit.MILLISECONDS);
+
+            return response.success(tokenInfo, "로그인에 성공했습니다.", HttpStatus.OK);
+        }
+
+        public ResponseEntity<?> reissue(UserRequestDto.Reissue reissue) {
+            // 1. Refresh Token 검증
+            if (!jwtTokenProvider.validateToken(reissue.getRefreshToken())) {
+                return response.fail("Refresh Token 정보가 유효하지 않습니다.", HttpStatus.BAD_REQUEST);
+            }
+
+            // 2. Access Token 에서 User email 을 가져옵니다.
+            Authentication authentication = jwtTokenProvider.getAuthentication(reissue.getAccessToken());
+
+            // 3. Redis 에서 User email 을 기반으로 저장된 Refresh Token 값을 가져옵니다.
+            String refreshToken = (String)redisTemplate.opsForValue().get("RT:" + authentication.getName());
+            // (추가) 로그아웃되어 Redis 에 RefreshToken 이 존재하지 않는 경우 처리
+            if(ObjectUtils.isEmpty(refreshToken)) {
+                return response.fail("잘못된 요청입니다.", HttpStatus.BAD_REQUEST);
+            }
+            if(!refreshToken.equals(reissue.getRefreshToken())) {
+                return response.fail("Refresh Token 정보가 일치하지 않습니다.", HttpStatus.BAD_REQUEST);
+            }
+
+            // 4. 새로운 토큰 생성
+            UserResponseDto.TokenInfo tokenInfo = jwtTokenProvider.generateToken(authentication);
+
+            // 5. RefreshToken Redis 업데이트
+            redisTemplate.opsForValue()
+                    .set("RT:" + authentication.getName(), tokenInfo.getRefreshToken(), tokenInfo.getRefreshTokenExpirationTime(), TimeUnit.MILLISECONDS);
+
+            return response.success(tokenInfo, "Token 정보가 갱신되었습니다.", HttpStatus.OK);
+        }
+
+        public ResponseEntity<?> logout(UserRequestDto.Logout logout) {
+            // 1. Access Token 검증
+            if (!jwtTokenProvider.validateToken(logout.getAccessToken())) {
+                return response.fail("잘못된 요청입니다.", HttpStatus.BAD_REQUEST);
+            }
+
+            // 2. Access Token 에서 User email 을 가져옵니다.
+            Authentication authentication = jwtTokenProvider.getAuthentication(logout.getAccessToken());
+
+            // 3. Redis 에서 해당 User email 로 저장된 Refresh Token 이 있는지 여부를 확인 후 있을 경우 삭제합니다.
+            if (redisTemplate.opsForValue().get("RT:" + authentication.getName()) != null) {
+                // Refresh Token 삭제
+                redisTemplate.delete("RT:" + authentication.getName());
+            }
+
+            // 4. 해당 Access Token 유효시간 가지고 와서 BlackList 로 저장하기
+            Long expiration = jwtTokenProvider.getExpiration(logout.getAccessToken());
+            redisTemplate.opsForValue()
+                    .set(logout.getAccessToken(), "logout", expiration, TimeUnit.MILLISECONDS);
+
+            return response.success("로그아웃 되었습니다.");
+        }
+
+        public ResponseEntity<?> authority() {
+            // SecurityContext에 담겨 있는 authentication userEamil 정보
+            String userEmail = SecurityUtil.getCurrentUserEmail();
+
+            Users user = usersRepository.findByEmail(userEmail)
+                    .orElseThrow(() -> new UsernameNotFoundException("No authentication information."));
+
+            // add ROLE_ADMIN
+            user.getRoles().add(Authority.ROLE_ADMIN.name());
+            usersRepository.save(user);
+
+            return response.success();
+        }
+    }
+    ```
+
+
+
+
+
+
 
 
 
