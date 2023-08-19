@@ -243,27 +243,28 @@
   - 공통 매핑 정보가 필요할 때, 부모 클래스에 선언하고 속성만 상속 받아서 사용하고 싶을 때 사용한다
 - @EntityListeners
   - Entity의 변화를 감지하고 데이블의 데이터를 조작하는 일을 수행한다
-  - JPA에서는 아래의 7가지 Event를 제공한다
-    - @PrePersist : Persist(insert)메서드가 호출되기 전에 실행되는 메서드
-    - @PreUpdate : merge메서드가 호출되기 전에 실행되는 메서드
-    - @PreRemove : Delete메서드가 호출되기 전에 실행되는 메서드
-    - @PostPersist : Persist(insert)메서드가 호출된 이후에 실행되는 메서드
-    - @PostUpdate : merge메서드가 호출된 후에 실행되는 메서드
-    - @PostRemove : Delete메서드가 호출된 후에 실행되는 메서드
-    - @PostLoad : Select조회가 일어난 직후에 실행되는 메서드
-  - Spring JPA에서 AuditingEntityListener.class를 제공한다 (config의 @EnableJpaAuditing가 필요)
-    - ```
-      @MappedSuperclass
-      @EntityListeners(value = AuditingEntityListener.class)
-      public abstract class BaseTimeEntity {
-          @CreatedDate //데이터가 생성될 때(@PrePersist) 업데이트
-          private LocalDateTime createdDate;
+  - 콜백 이벤트들을 사용하는 방법은 엔티티 내부에 직접 메서드를 작성해주는 것과 EntityListener를 만들어 주는 방법이 있다
+    - 직접 메서드를 작성 (JPA에서는 아래의 7가지 Event를 제공)
+      - @PrePersist : Persist(insert)메서드가 호출되기 전에 실행되는 메서드
+      - @PreUpdate : merge메서드가 호출되기 전에 실행되는 메서드
+      - @PreRemove : Delete메서드가 호출되기 전에 실행되는 메서드
+      - @PostPersist : Persist(insert)메서드가 호출된 이후에 실행되는 메서드
+      - @PostUpdate : merge메서드가 호출된 후에 실행되는 메서드
+      - @PostRemove : Delete메서드가 호출된 후에 실행되는 메서드
+      - @PostLoad : Select조회가 일어난 직후에 실행되는 메서드
+    - EntityListener를 만들어 주는 방법
+      - Spring JPA에서 AuditingEntityListener.class를 제공한다 (config의 @EnableJpaAuditing가 필요)
+      - ```
+        @MappedSuperclass
+        @EntityListeners(value = AuditingEntityListener.class)
+        public abstract class BaseTimeEntity {
+            @CreatedDate //데이터가 생성될 때(@PrePersist) 업데이트
+            private LocalDateTime createdDate;
 
-          @LastModifiedDate //데이터가 업데이트 될때(@PreUpdate) 업데이트
-          private LocalDateTime modifiedDate;
-      }
-      ```
-
+            @LastModifiedDate //데이터가 업데이트 될때(@PreUpdate) 업데이트
+            private LocalDateTime modifiedDate;
+        }
+        ```
 
 
 
