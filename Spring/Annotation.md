@@ -64,6 +64,25 @@
     @Profile("!dev") -> 빈 초기화 x
     public class MyConfig {}
     ```
+- @ControllerAdvice
+  - 모든 Controller에서 발생할 수 있는 예외를 잡아 처리해주는 어노테이션입니다
+- @ExceptionHandler
+  - @Controller, @RestController 어노테이션이 적용된 Bean 내에서 발생하는 예외를 잡아서 하나의 메서드에서 처리를 해주는 기능이다
+  - Contoller, RestController에서만 적용이 가능하고, @Service의 빈에서는 적용이 안된다
+  - ```
+    @Slf4j
+    @RestControllerAdvice
+    public class GlobalControllerAdvice {
+
+        @ExceptionHandler(SnsApplicationException.class)
+        public ResponseEntity<?> applicationHandler(SnsApplicationException e) {
+            log.error("Error occurs {}", e.toString());
+            return ResponseEntity.status(e.getErrorCode().getStatus())
+                    .body(Response.error(e.getErrorCode().name()));
+        }
+    }
+    ```
+
 
 ### Spring Boot Annotation
 - @SpringbootApplication
