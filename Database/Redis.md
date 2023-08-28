@@ -102,6 +102,7 @@
 
 
 ### Redis Library 사용
+- https://redis.io/commands/
 - Jedis: 개발 복잡도가 낮다
 - Luttuce: 다양한 옵션이 존재하여(advanced) scaling에 좋고, non-blocking reactive application에 유리하다
   - DataType
