@@ -13,7 +13,8 @@
       - 앱을 재시작하는 형태로, 앱의 모든 상태가 초기화되고 코드의 변경 사항을 반영할 수 있다
     - Hot reload
       - 앱을 재실행하지는 않지만, 코드의 변경 사항을 반영하는 기능
-
+- 파일 네이밍 규칙
+  - ![image](https://github.com/kimho1wq/TIL/assets/15611500/ea780cdd-0e86-49ac-ab50-379fdb5ecb97)
 
 
 ### Widget
@@ -197,7 +198,7 @@
               color: Colors.red,
               height: 100,
             )),
-            //Flexible(flex: 1, child: Container(c olor: Colors.green,)),
+            //Flexible(flex: 1, child: Container(color: Colors.green,)),
             //Flexible(flex: 2, child: Container(color: Colors.blue,)),
           ],
         );
@@ -797,7 +798,57 @@
     }
     ```
 
+- Flutter Theme 사용
+  - ```
+    void main() {
+      runApp(
+        MaterialApp(
+          home: HomeWidget(),
+          theme: customTheme,
+        ),
+      );
+    }
 
+    final customTheme = ThemeData(
+      colorScheme: ColorScheme.fromSeed(seedColor: Colors.indigo),
+      useMaterial3: true,
+      textTheme: const TextTheme(
+        bodyMedium: TextStyle(fontWeight: FontWeight.normal, fontSize: 30),
+      ));
+
+    class _HomeWidgetState extends State<HomeWidget> {
+      int count = 0;
+  
+      @override
+      Widget build(BuildContext context) {
+        final textTheme = customTheme.textTheme;
+  
+        return Scaffold(
+          appBar: AppBar(
+            title: const Text('Flutter Theme'),
+          ),
+          body: Center(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  'Press Count',
+                  style: textTheme.bodyLarge,
+                ),
+                Text(
+                  '$count',
+                  style: textTheme.displayLarge,
+                ),
+              ],
+            ),
+          ),
+          floatingActionButton: FloatingActionButton(
+            onPressed: () => setState(() => count += 1),
+          ),
+        );
+      }
+    }
+    ```
 
 
 
