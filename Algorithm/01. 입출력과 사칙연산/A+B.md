@@ -1,4 +1,4 @@
-# [BOJ] 1000. A+B
+# [BOJ] [1000. A+B](https://www.acmicpc.net/problem/1000)
 
 ### 1. 문제
 

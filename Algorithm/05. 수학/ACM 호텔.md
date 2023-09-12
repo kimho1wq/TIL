@@ -1,4 +1,4 @@
-# [BOJ] 10250. ACM 호텔
+# [BOJ] [10250. ACM 호텔](https://www.acmicpc.net/problem/10250)
 
 ## 1. 문제
 
