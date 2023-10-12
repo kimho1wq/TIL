@@ -60,8 +60,15 @@
     - ```git commit -m "<메시지>" --amend```
   - 이전 커밋을 수정하고 커밋 메시지를 재사용하기
     - ```git commit -C HEAD --amend```
+- git reset
   - 커밋되지 않고 스테이징된 변경 사항 재설정하기
     - ```git reset HEAD <파일> [<파일>]```
+  - 원격 git 저장소의 master을 내 local에 덮어 씌울경우
+    - ```
+      git fetch --all
+      git reset --hard origin/master
+      git pull origin master
+      ```
 - git branch
   - 지역 브랜치 목록 보기
     - ```git branch```
