@@ -42,6 +42,12 @@
     - ```git config --list```
   - Git의 출력결과 색상 활성화하기
     - ```git config --global color.ui "auto"```
+  - Git ssh token으로 자동 변환 시키기
+    - ```git config --global url."${PRIVATE-ACCESS-TOKEN}:x-oauth-basic@github.com/kimho1wq".insteadOf "https://github.com/kimho1wq"```
+  - config 명령어로 설정된 정보 삭제하기
+    - ```git config --unset user.name```
+  - config 설정 파일 확인
+    - ```vim ~/.gitconfig```
 - git add
   - 새로운 파일을 추가하거나 존재하는 파일 스테이징하기
     - ```git add <파일>```
