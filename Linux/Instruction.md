@@ -81,7 +81,9 @@
     - ```제어판 -> 사용자 계정 -> 자격증명관리 -> windows 자격 증명```
     - ![image](https://github.com/kimho1wq/TIL/assets/15611500/910c0500-7be3-4965-9b51-976186ae0304)
 
-
+### 마운트
+- 연구실 서버 마운트
+  - ```$ sudo mount -t cifs //172.16.163.135/SDB ./nas -o user=,pass=,rw,vers=1.0```
 
 
 
