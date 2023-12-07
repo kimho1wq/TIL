@@ -29,9 +29,15 @@
   - multi-resolution encoder(MRE)를 이용하여 다양한 temporal resolution과 spectral resolution을 추출하여 사용한다
     - MRE은 다양한 kernel size의 convolutional layer를 사용하여 temporal resolution를 추출한다
 
+- 음소(phoneme) 정보는 text independent의 화자 인식에서 불필요한 존재이지만 대부분의 시스템에서 phoneme 정보를 사용하여 성능을 향상시킨 결과가 존재한다
+  - 이러한 이유는 화자 인식 시스템의 segment-based pooling mechanism에서 speaker-specific한 정보가 많이 포함되어 있는 특정 phoneme 정보에 집중하기 때문이다
+  - 
 
 
 
+
+
+         
 
 
 
