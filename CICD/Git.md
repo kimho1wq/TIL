@@ -48,6 +48,9 @@
     - ```git config --unset user.name```
   - config 설정 파일 확인
     - ```vim ~/.gitconfig```
+  - id, password를 disk에 저장시키기
+    - ```git config --global credential.helper store```
+    - 저장된 로그인 정보는 ~/.git-credentials 경로에 저장된다
 - git add
   - 새로운 파일을 추가하거나 존재하는 파일 스테이징하기
     - ```git add <파일>```
