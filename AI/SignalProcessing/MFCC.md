@@ -1,4 +1,4 @@
-# Mel-Frequency Cepstral Coefficients(MFCC)
+# Mel-Frequency Cepstral Coefficients(MFCCs)
 
 ![image](https://github.com/kimho1wq/TIL/assets/15611500/a7f7227e-d5c3-489f-8b20-19d7624fd319)
 
@@ -60,8 +60,33 @@ DFT의 결과는 복소수(complex number)로 실수부(real part)와 허수부(
 
 결국 MFCC를 구할 때는 phase 정보는 없애고 magnitude 정보만을 남겨서 사용한다
 
+### Power Spectrum
+$k$번째 주파수 구간(bin)에 해당하는 DFT 결과를 $X[k]$라고 할 때 파워(Power)를 구하는 공식은 $power = \frac{|X[k]|^2}{fft_n}$ 이다
+즉, 파워 스펙트럼(power spectrum)은 진폭(magnitude)의 제곱을 fft_size로 나눠준 값이다
 
 
+### Filter Banks
+사람의 소리 인식은 1000Hz 이하의 저주파수(low frequency) 영역대가 고주파수(high frequency) 대비 민감하다
+그렇기 때문에 저주파수 영역대의 에너지(energe) 정보를 상대적으로 세밀하게 볼 필요가 있다
 
+이때 적용하는 기법을 필터 뱅크(Filter Banks)라고 하고 filter banks는 멜 스케일(Mel Scale) 필터를 사용한다
+기존 주파수(f, 단위:Hz)를 멜(m, 단위:mel)로 변환하는 수식은 $m=2595 log_{10}(1 + \frac{f}{700})$를 사용한다
+
+mel 필터의 개수(n_filter=40) 정하면 fbank[0]은 저주파수 영역대를 세밀하게 살피는 필터이고, fbank[39]는 고주파수 영역대를 넓게 보는 필터이다
+![image](https://github.com/kimho1wq/TIL/assets/15611500/a152341a-7501-4d02-8376-87ba5b3beb71)
+
+### Log-Mel Spectrum
+사람이 2배 큰 소리를 인식하기 위해선 실제로 100배 큰 소리가 있어야 하는 것 처럼, 사람의 소리 인식은 로그(log) 스케일에 가깝다
+따라서 보통 filter-banks 기법을 적용한 멜 스펙트럼(mel spectrum)에 로그를 취하여 로그 멜 스펙트럼(log-mel spectrum)을 만들어 사용한다
+
+### MFCCs
+log-mel spectrum은 특징(feature)은 주변 몇개의 주파수 영역대의 에너지를 한데 모아 보기때문에 변수 간 상관관계(correlation)이 존재한다
+이것은 변수 간 독립(independence)를 가정한 Gaussian Mixture Model(GMM)에 입력하기 어렵기 때문에,
+log-mel spectrum에 역푸리에 변환(Inverse Fourier Transform, IFT)을 수행하여 변수 간 상관관계를 해소시키는 것이 MFCCs 이다
+
+MFCCs는 상관관계가 높았던 주파수 도메인 정보가 IFT로 인해 새로운 도메인으로 바뀌어 상대적으로 변수 간 상관관계가 해소된다
+MFCCs를 만들 때는 역이산 코시안 변환(Inverse Discrete Cosine Transform)을 사용하여 푸리에 변환에서 실수 파트만을 진행한다
+
+MFCCs의 shape은 필터의 개수(n_filter)만큼 나오는데, 이 중에서 2~13번째 특징만 뽑아 최종적으로 사용한다(feat_dim = 12)
 
 
