@@ -52,9 +52,9 @@ MRE은 다양한 kernel size의 convolutional layer를 사용하여 temporal res
 |ECAPA-TDNN(implementation)|MFB-80|0.98 / 0.668|1.02|1.85|4.12|
 |RawNet2|Waveform|2.43|2.64|3.88|7.24|
 |RawNeXt|Waveform|1.29 / 0.142|1.45|2.34|4.37|
-|FDN-W-Res2MP-Net|Waveform|1.42 / 0.0925| - | - | - |
-|RawNet3(implementation)|Waveform|1.15 / 0.07541|1.23|2.28|5.04|
-|MRS-RawNet(proposed)|Waveform|0.87 / 0.0551|0.98|1.75|3.97|
+|FDN-W-Res2MP-Net|Waveform|1.42 / 0.093| - | - | - |
+|RawNet3(implementation)|Waveform|1.15 / 0.075|1.23|2.28|5.04|
+|MRS-RawNet(proposed)|Waveform|0.87 / 0.055|0.98|1.75|3.97|
 
 
 
