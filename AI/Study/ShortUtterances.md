@@ -54,9 +54,9 @@ MRE은 다양한 kernel size의 convolutional layer를 사용하여 temporal res
 |RawNeXt|Waveform|1.29 / 0.142|1.45|2.34|4.37|
 |FDN-W-Res2MP-Net|Waveform|1.42 / 0.093| - | - | - |
 |RawNet3(implementation)|Waveform|1.15 / 0.075|1.23|2.28|5.04|
-|MRS-RawNet(proposed)|Waveform|0.87 / 0.055|0.98|1.75|3.97|
-
-
+|RawNet3 with MRFE(proposed)|Waveform|0.96 / 0.067|1.03|1.84|4.15|
+|RawNet3 with ETS-ConvNeXt(proposed)|Waveform|  | | | |
+|MRS-RawNet(proposed)|Waveform|0.87 / 0.060|0.99|1.64|3.79|
 
 
 
